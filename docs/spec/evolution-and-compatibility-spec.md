@@ -18,13 +18,13 @@ relations:
 
 ## Purpose
 
-This document defines how RAW Development Analysis can evolve for decades without requiring old observations, decisions, or artifacts to be reinterpreted under new semantics.
+This document defines how RAW Development Analysis can evolve across a 1,000-year preservation horizon without requiring old observations, decisions, or artifacts to be reinterpreted under new semantics.
 
 ## Scope
 
 This specification governs semantic identifiers, schema evolution, procedure versioning, historical observation handling, extension compatibility, source identity, units, coordinates, color definitions, AI provenance, target-model evolution, and baseline-profile revisioning.
 
-It applies to all persistent or exchangeable project data whose meaning must survive implementation replacement.
+It applies to all persistent or exchangeable project data whose meaning must survive repeated implementation, organization, storage, and representation replacement.
 
 ## Requirements
 
@@ -36,9 +36,11 @@ Breaking semantic changes MUST create a distinguishable new version or identity 
 
 ## Principle
 
-Semantic meaning is more durable than field names, file layouts, libraries, or model APIs.
+Semantic meaning is more durable than field names, file layouts, libraries, model APIs, repositories, vendors, and organizations.
 
 The project therefore versions definitions, procedures, schemas, and adapters independently.
+
+The preservation target assumes that every concrete implementation layer may disappear. Durable records MUST therefore carry enough semantic closure and provenance to be migrated into future representations without requiring undocumented knowledge from the original implementation.
 
 ## Compatibility layers
 
@@ -245,3 +247,16 @@ Migration guidance SHOULD state whether migration is:
 For long-term archival value, it is preferable to preserve an old, fully described result than to replace it with a newer result whose provenance is incomplete.
 
 The system optimizes for explainability across time, not perpetual normalization to the newest implementation.
+
+The 1,000-year preservation objective implies:
+
+- no single storage format is permanent;
+- no single hash algorithm is permanent;
+- no single registry host is permanent;
+- no single implementation language is permanent;
+- no single vendor or organization is permanent;
+- no single AI model or search/index technology is permanent.
+
+Durability therefore depends on preserving **meaning + provenance + identity + migration history**, not on freezing current technology.
+
+A future migration that cannot preserve some semantic property MUST record the loss explicitly rather than silently substituting a new interpretation.
