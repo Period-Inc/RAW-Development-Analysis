@@ -102,7 +102,10 @@ The following questions remain deliberately unresolved:
 - which initial measurements materially improve development decisions in real experiments;
 - whether a separately named target-neutral Development Intent entity is justified at all, and if so how much can be normalized without creating false equivalence;
 - privacy/export policy for GPS, serial numbers, timestamps, faces, and other sensitive evidence;
-- whether "Photo Observation Package (POP)" remains the public serialization name after schema experiments.
+- whether "Photo Observation Package (POP)" remains the public serialization name after schema experiments;
+- which fingerprint families are durable enough to promote from experiments into Registry definitions;
+- which comparison dimensions deserve stable cross-application semantics;
+- how derivative-identity evidence should be combined without collapsing lineage into visual similarity.
 
 Unresolved items MUST NOT be smuggled into Core through implementation convenience.
 
@@ -129,3 +132,22 @@ A second review against the fifty-year design objective identified four prematur
 The review also replaced the epistemically strong term `Extracted Fact` with `Source Assertion`, renamed `Measurement Domain` to `Signal Domain`, and renamed `Evidence Representation` to `Derived Representation`.
 
 These corrections were canonicalized into the active Core specifications before implementation began.
+
+### Technical foundation expansion
+
+Subsequent discussion identified image similarity, parameter search, derivative detection, fingerprinting, archive retrieval, and on-premise image search as natural consumers of the same Observation foundation.
+
+The accepted outcome is to keep RDA as a technical foundation and defer service/product design.
+
+Comparison, Fingerprint, Index, and Retrieval are therefore being specified as reusable technical primitives. Indexes are rebuildable projections; they are not authoritative archival records. Fingerprints and similarity results remain typed, procedure-defined derived information with provenance.
+
+The design deliberately separates:
+
+- byte identity;
+- likely same-image derivative;
+- visual similarity;
+- semantic similarity;
+- candidate retrieval;
+- expensive pairwise verification/ranking.
+
+This avoids using one opaque "similarity score" for fundamentally different questions.
