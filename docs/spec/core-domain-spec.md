@@ -296,10 +296,12 @@ Interpretation SHOULD record:
 
 - actor/procedure identity;
 - input Observation Set identity;
+- the exact observation subset / Derived Representations actually exposed to the actor when it did not receive the complete Observation Set;
+- any input-projection or transformation identity that materially changed what the actor could inspect;
 - Development Context identity when used;
 - output assertions;
 - confidence or uncertainty where meaningful;
-- rationale/evidence references when available.
+- rationale/observation references when available.
 
 Interpretive labels MUST NOT be inserted into the Observation Set as if they were measurements.
 
@@ -317,6 +319,8 @@ A decision MAY contain:
 - references to supporting observations/interpretations.
 
 A baseline-plus-delta decision is valid, but the baseline identity MUST be explicit.
+
+A machine-produced decision SHOULD identify the reasoning/decision procedure and the effective input view used to produce it. Referencing a complete Observation Set is insufficient when the actor actually received only a filtered or transformed subset.
 
 ### 10. Target Model
 
