@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Period-Inc/RAW-Development-Analysis/schemas/definition-registry.schema.json",
+  "title": "RDA Definition Registry",
+  "type": "object",
+  "required": [
+    "rda_registry",
+    "registry_id",
+    "registry_version",
+    "namespace",
+    "status",
+    "definitions"
+  ],
+  "properties": {
+    "rda_registry": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "registry_id": {
+      "$ref": "#/$defs/localIdentifier"
+    },
+    "registry_version": {
+      "$ref": "#/$defs/semver"
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "status": {
+      "enum": ["provisional", "stable", "deprecated"]
+    },
+    "definitions": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/observationDefinition"},
+          {"$ref": "#/$defs/signalDomainDefinition"},
+          {"$ref": "#/$defs/procedureDefinition"}
+        ]
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "localIdentifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9][a-z0-9-]*)*$"
+    },
+    "definitionId": {
+      "type": "string",
+      "pattern": "^rda\\.(observation|signal-domain|procedure)\\.[a-z0-9]+(?:[.-][a-z0-9][a-z0-9-]*)*$"
+    },
+    "definitionRef": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": {"$ref": "#/$defs/definitionId"},
+        "version": {"$ref": "#/$defs/semver"}
+      },
+      "additionalProperties": false
+    },
+    "externalReference": {
+      "type": "object",
+      "required": ["authority", "identifier"],
+      "properties": {
+        "authority": {"type": "string", "minLength": 1},
+        "identifier": {"type": "string", "minLength": 1},
+        "edition": {"type": "string"},
+        "locator": {"type": "string"},
+        "uri": {"type": "string", "format": "uri"}
+      },
+      "additionalProperties": true
+    },
+    "common": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "kind",
+        "stability",
+        "title",
+        "description"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/definitionId"},
+        "version": {"$ref": "#/$defs/semver"},
+        "kind": {
+          "enum": ["observation", "signal_domain", "procedure"]
+        },
+        "stability": {
+          "enum": ["provisional", "stable", "deprecated"]
+        },
+        "title": {"type": "string", "minLength": 1},
+        "description": {"type": "string", "minLength": 1},
+        "supersedes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/definitionRef"}
+        },
+        "external_references": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/externalReference"}
+        }
+      }
+    },
+    "valueContract": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": [
+            "boolean",
+            "integer",
+            "number",
+            "string",
+            "array",
+            "object",
+            "binary",
+            "image",
+            "tensor"
+          ]
+        },
+        "unit": {"type": ["string", "null"]},
+        "minimum": {"type": "number"},
+        "maximum": {"type": "number"},
+        "shape": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"type": "integer", "minimum": 0},
+              {"type": "string", "minLength": 1}
+            ]
+          }
+        },
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "observationDefinition": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "type": "object",
+          "required": ["observation_kind", "value_contract"],
+          "properties": {
+            "kind": {"const": "observation"},
+            "id": {
+              "type": "string",
+              "pattern": "^rda\\.observation\\.[a-z0-9]+(?:[.-][a-z0-9][a-z0-9-]*)*$"
+            },
+            "observation_kind": {
+              "enum": [
+                "source_assertion",
+                "measurement",
+                "derived_representation"
+              ]
+            },
+            "value_contract": {"$ref": "#/$defs/valueContract"},
+            "signal_domain_refs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/definitionRef"}
+            },
+            "procedure_refs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/definitionRef"}
+            },
+            "required_signal_state_properties": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      ]
+    },
+    "signalDomainDefinition": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "type": "object",
+          "required": ["state_contract"],
+          "properties": {
+            "kind": {"const": "signal_domain"},
+            "id": {
+              "type": "string",
+              "pattern": "^rda\\.signal-domain\\.[a-z0-9]+(?:[.-][a-z0-9][a-z0-9-]*)*$"
+            },
+            "state_contract": {
+              "type": "object",
+              "required": ["required_properties"],
+              "properties": {
+                "required_properties": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {"type": "string", "minLength": 1}
+                },
+                "optional_properties": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {"type": "string", "minLength": 1}
+                },
+                "notes": {"type": "string"}
+              },
+              "additionalProperties": true
+            }
+          }
+        }
+      ]
+    },
+    "procedureDefinition": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "type": "object",
+          "required": ["inputs", "outputs", "parameters"],
+          "properties": {
+            "kind": {"const": "procedure"},
+            "id": {
+              "type": "string",
+              "pattern": "^rda\\.procedure\\.[a-z0-9]+(?:[.-][a-z0-9][a-z0-9-]*)*$"
+            },
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["role"],
+                "properties": {
+                  "role": {"type": "string", "minLength": 1},
+                  "signal_domain": {"$ref": "#/$defs/definitionRef"},
+                  "required_signal_state_properties": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {"type": "string", "minLength": 1}
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "outputs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"$ref": "#/$defs/definitionRef"}
+            },
+            "parameters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name", "type", "required"],
+                "properties": {
+                  "name": {"type": "string", "minLength": 1},
+                  "type": {
+                    "enum": [
+                      "boolean",
+                      "integer",
+                      "number",
+                      "string",
+                      "array",
+                      "object"
+                    ]
+                  },
+                  "required": {"type": "boolean"},
+                  "description": {"type": "string"},
+                  "default": {}
+                },
+                "additionalProperties": true
+              }
+            },
+            "determinism": {
+              "enum": ["deterministic", "stochastic", "implementation_defined"]
+            },
+            "equivalence": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}
