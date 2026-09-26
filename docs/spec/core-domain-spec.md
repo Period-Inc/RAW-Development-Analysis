@@ -127,7 +127,7 @@ A Source Assertion MUST identify its source field or extraction procedure when a
 
 #### 2.2 Measurement
 
-A numeric or structured result computed from source data under an explicit Measurement Domain and Analysis Procedure.
+A numeric or structured result computed from source data under an explicit Signal Domain and Analysis Procedure.
 
 Examples:
 
@@ -151,7 +151,7 @@ A Measurement MUST define or reference:
 
 Names such as `brightness`, `quality`, or `color_score` are insufficient unless their measurement semantics are explicitly defined.
 
-#### 2.3 Evidence Representation
+#### 2.3 Derived Representation
 
 A derived representation intended to preserve or expose information for machine or human inspection.
 
@@ -164,7 +164,7 @@ Examples:
 - histogram image;
 - segmentation-independent spatial map.
 
-An Evidence Representation MUST declare:
+An Derived Representation MUST declare:
 
 - how it was produced;
 - its dimensions;
@@ -175,11 +175,11 @@ An Evidence Representation MUST declare:
 - compression/encoding;
 - relationship to the Source Artifact.
 
-Evidence Representation is evidence for reasoning. It is not a substitute for the Source Artifact.
+A Derived Representation is a transformed view of source information for inspection, measurement support, or downstream reasoning. It is not a substitute for the Source Artifact and does not by itself assert that an interpretation is true.
 
-### 3. Measurement Domain
+### 3. Signal Domain
 
-A Measurement Domain specifies the mathematical and imaging space in which a value has meaning.
+A Signal Domain specifies the signal/image representation state in which a value has meaning.
 
 It MUST be explicit whenever the same numeric value could have different meanings under different processing stages.
 
@@ -205,7 +205,7 @@ A domain definition SHOULD specify, as applicable:
 
 ### 4. Analysis Procedure
 
-An Analysis Procedure defines the semantic method used to produce a Source Assertion, Measurement, or Evidence Representation.
+An Analysis Procedure defines the semantic method used to produce a Source Assertion, Measurement, or Derived Representation.
 
 Procedure identity describes **what method means**, not which executable happened to run it.
 
@@ -408,7 +408,7 @@ Measurement uncertainty and Interpretation confidence are different concepts and
 
 The Core does not define a directory, ZIP layout, or transport format.
 
-A **Photo Observation Package (POP)** MAY serialize an Observation Set and its Evidence Representations for transport, caching, archival inspection, or AI input.
+A **Photo Observation Package (POP)** MAY serialize an Observation Set and its Derived Representations for transport, caching, archival inspection, or AI input.
 
 POP is a serialization profile, not the domain itself.
 
@@ -424,7 +424,7 @@ The current concept maps as follows:
 | converted DNG | distinct Source Artifact linked by lineage |
 | EXIF / RAW metadata extraction | Source Assertions |
 | histogram / clipping / noise calculation | Measurements |
-| neutral / highlight / shadow small previews | Evidence Representations |
+| neutral / highlight / shadow small previews | Derived Representations |
 | intermediate package | serialization of an Observation Set (candidate: POP) |
 | `_Fundamental.xmp` | Development Context / baseline profile |
 | AI analysis | Interpretation and/or Development Decision actor |
