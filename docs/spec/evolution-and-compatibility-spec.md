@@ -202,6 +202,8 @@ AI-generated Interpretations and Decisions SHOULD retain:
 - model/version or immutable deployment identity when available;
 - prompt/policy identity or decision-procedure identity when material;
 - input Observation Set identity;
+- exact selected observation / Derived Representation inputs or a content-addressed input-view identity when the full set was not exposed;
+- input-projection/transformation identity when material;
 - Development Context identity.
 
 A future non-AI actor MUST be able to occupy the same role.
