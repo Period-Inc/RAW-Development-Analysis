@@ -8,6 +8,7 @@ import sys
 import yaml
 
 from .pop import load_pop, validate_pop, validate_pop_fixture_contract
+from .raw_probe import probe_raw
 from .registry import ROOT, load_registry, validate_fixture_contract, validate_registry
 
 
@@ -31,6 +32,12 @@ def main(argv: list[str] | None = None) -> int:
 
     validate_pop_cmd = sub.add_parser("validate-pop", help="Validate a POP manifest")
     validate_pop_cmd.add_argument("path")
+
+    probe_raw_cmd = sub.add_parser(
+        "probe-raw",
+        help="Experimentally inspect decoder-exposed unpacked RAW sensor state",
+    )
+    probe_raw_cmd.add_argument("path")
 
     pop_fixtures = sub.add_parser("test-pop-fixtures", help="Run POP conformance fixtures")
     pop_fixtures.add_argument(
@@ -56,6 +63,14 @@ def main(argv: list[str] | None = None) -> int:
         result = validate_pop(load_pop(pathlib.Path(args.path)))
         _print_json(result.as_dict())
         return 0 if result.result == "valid" else 1
+
+    if args.command == "probe-raw":
+        try:
+            _print_json(probe_raw(pathlib.Path(args.path)))
+        except RuntimeError as exc:
+            _print_json({"result": "unavailable", "error": str(exc)})
+            return 2
+        return 0
 
     if args.command == "test-pop-fixtures":
         document = yaml.safe_load(pathlib.Path(args.path).read_text(encoding="utf-8")) or {}
