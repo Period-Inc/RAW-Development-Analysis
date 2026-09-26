@@ -26,31 +26,35 @@ The project intends to remain useful across major changes in software and photog
 
 ## Decision
 
-The architecture SHALL separate these semantic stages:
+The architecture SHALL separate these semantic dependencies:
 
 ```text
-Source Asset
+Source Artifact
+  -> Observation Run
   -> Observation Set
   -> Interpretation
   -> Development Decision
   -> Target Encoding
+  -> optional Rendered Result
 ```
+
+This is not a mandatory linear workflow. The system SHALL model provenance as a dependency graph so that interpretations can request further observation, repeated runs can coexist, and decisions can be revised after rendering or evaluation.
 
 Development Context is supplied to Interpretation and/or Development Decision, not to Observation.
 
-The mechanical analyzer SHALL produce Observation data only.
+The mechanical analyzer SHALL execute declared Analysis Procedures and produce Observation Sets through explicit Observation Runs. It SHALL NOT silently emit development judgments as measurements.
 
 AI SHALL consume observations and context as an Interpretation/Decision actor. It SHALL NOT be treated as the producer of source facts merely because it can inspect images.
 
 Adobe XMP SHALL be treated as a Target Encoding, not as the canonical development model.
 
-A Photo Observation Package (POP) MAY be defined as a portable serialization of an Observation Set plus Evidence Representations. POP SHALL NOT itself become the Core domain model.
+A Photo Observation Package (POP) MAY be defined as a portable serialization of an Observation Set plus its Derived Representations and execution provenance. POP SHALL NOT itself become the Core domain model.
 
 ## Why
 
 This separation allows each layer to evolve independently:
 
-- RAW decoding can improve without changing development policy.
+- RAW decoding can improve without changing development policy, while old and new Observation Runs remain distinguishable.
 - AI can change without regenerating the meaning of source measurements.
 - Lightroom can disappear without invalidating stored observations and decisions.
 - a photographer's baseline profile can evolve without contaminating source analysis.
