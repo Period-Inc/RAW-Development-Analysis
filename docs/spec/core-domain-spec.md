@@ -32,7 +32,9 @@ It does not define a concrete package layout, RAW decoding library, AI prompt, L
 
 Implementations claiming Core compatibility MUST preserve the stage boundaries and invariants in this document even when their internal storage or execution pipeline differs.
 
-Core concepts MUST be represented with enough provenance and type information that observation, interpretation, decision, and target-specific encoding cannot be silently conflated.
+Core concepts MUST be represented with enough provenance and type information that source assertion, measurement, execution, interpretation, decision, and target-specific encoding cannot be silently conflated.
+
+Core provenance semantics SHOULD remain mappable to established provenance models rather than inventing incompatible concepts where an established mapping exists. Such standards are interoperability targets, not Core dependencies.
 
 ## Normative language
 
@@ -233,7 +235,7 @@ An **Observation Run** records the execution provenance required to explain an a
 
 Reproducibility claims MUST state whether they mean semantic equivalence, tolerance-bounded numeric equivalence, or byte-identical output.
 
-### 5. Development Context
+### 6. Development Context
 
 Development Context is information intentionally supplied to guide interpretation or decision.
 
@@ -249,7 +251,7 @@ Examples:
 
 Development Context is not evidence about the source.
 
-### 6. Interpretation
+### 7. Interpretation
 
 Interpretation assigns meaning to observations under a context.
 
@@ -273,7 +275,7 @@ Interpretation SHOULD record:
 
 Interpretive labels MUST NOT be inserted into the Observation Set as if they were measurements.
 
-### 7. Development Decision
+### 8. Development Decision
 
 A Development Decision is an explicit choice of development action based on an Observation Set, optional Interpretation, and Development Context.
 
@@ -288,7 +290,7 @@ A decision MAY contain:
 
 A baseline-plus-delta decision is valid, but the baseline identity MUST be explicit.
 
-### 8. Target Model
+### 9. Target Model
 
 A Target Model describes the capabilities and parameter semantics of a concrete development system.
 
@@ -301,7 +303,7 @@ Examples:
 
 The Target Model is an adapter-side concept. It MUST NOT redefine Observation semantics.
 
-### 9. Target Encoding
+### 10. Target Encoding
 
 A Target Encoding is the serialized artifact that applies or communicates a Development Decision to a Target Model.
 
@@ -314,7 +316,7 @@ Examples:
 
 Target Encoding is derived and replaceable. It is never the canonical meaning of the Development Decision.
 
-### 10. Rendered Result
+### 11. Rendered Result
 
 A Rendered Result is a materialized visual or numeric output produced by applying a Development Decision, directly or through a Target Encoding, using a declared Target Model or renderer.
 
@@ -329,7 +331,7 @@ A Rendered Result SHOULD retain enough provenance to identify:
 
 Rendered Results are derived artifacts. They do not overwrite Source Artifacts or Observations.
 
-### 11. Evaluation Record
+### 12. Evaluation Record
 
 An Evaluation Record compares an observation, interpretation, decision, encoding, or rendered result against a reference or criterion.
 
