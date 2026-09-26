@@ -16,7 +16,7 @@ definitions:
       (tag 33434 / 0x829A). This is a source assertion expressed in seconds,
       not an independent measurement of the physical exposure duration.
     value_contract:
-      type: number
+      type: rational
       unit: s
     procedure_refs:
       - id: rda.procedure.metadata.read-exif-capture-fields
@@ -39,7 +39,7 @@ definitions:
       (tag 33437 / 0x829D). This records the source assertion and does not
       independently verify the effective physical aperture.
     value_contract:
-      type: number
+      type: rational
       unit: "1"
     procedure_refs:
       - id: rda.procedure.metadata.read-exif-capture-fields
@@ -92,7 +92,7 @@ definitions:
       recorded camera/file assertion, not an RDA recommendation to change
       development exposure by the same amount.
     value_contract:
-      type: number
+      type: rational
       unit: "APEX EV"
     procedure_refs:
       - id: rda.procedure.metadata.read-exif-capture-fields
@@ -115,7 +115,7 @@ definitions:
       (tag 37386 / 0x920A), expressed in millimetres. It records source metadata
       and does not infer 35 mm-equivalent focal length or field of view.
     value_contract:
-      type: number
+      type: rational
       unit: mm
     procedure_refs:
       - id: rda.procedure.metadata.read-exif-capture-fields
@@ -135,7 +135,8 @@ definitions:
     description: >
       Enumerate applicable Exif metadata structures in a Source Artifact and
       emit Source Assertions for the registered capture fields encountered.
-      The procedure preserves field identity and source locator. It does not
+      The procedure preserves exact source value representation, field identity,
+      and source locator. It does not
       reconcile conflicting values, infer missing values, convert
       PhotographicSensitivity into a more specific ISO meaning, or make a
       development judgment.
