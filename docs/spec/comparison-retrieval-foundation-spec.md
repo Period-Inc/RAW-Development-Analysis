@@ -255,7 +255,7 @@ For example:
 50 ranked results
 ```
 
-Each stage SHOULD preserve its procedure/configuration identity.
+Each stage SHOULD preserve its operation/configuration identity.
 
 This allows a local/on-premise system to minimize expensive AI or GPU inference while retaining traceable search behavior.
 
@@ -284,20 +284,28 @@ A Retrieval Result records:
 
 - query identity/resolved constraints;
 - index snapshot(s);
-- retrieval procedure/version;
+- retrieval operation identity/version;
 - candidate identities;
 - candidate scores/distances when meaningful;
 - ranking procedure/version when applied;
 - truncation/top-k behavior;
 - execution provenance.
 
-A result rank is contextual to that query and procedure.
+A result rank is contextual to that query and operation.
 
 It MUST NOT be stored as an intrinsic property of a Source Artifact.
 
 ## Search by parameter before expensive similarity
 
 RDA SHOULD support structured observations as first-class search predicates.
+
+### Procedure boundary
+
+Fingerprint generation and pairwise/multi-input comparison that produce typed Observations MAY use registered Analysis Procedure Definitions because their outputs are Observation Definitions.
+
+Index building, candidate retrieval, query projection, and ranking produce operational/search records rather than Observation Sets. They MUST NOT be falsely registered as Analysis Procedures merely to reuse the current Registry shape.
+
+Until a durable cross-application need is demonstrated, these operations retain explicit implementation/version/configuration provenance outside the Analysis Procedure Registry. A future Registry class for retrieval/index/ranking operations MAY be introduced through normal Core evolution if experiments show that stable semantic identity is required.
 
 This enables inexpensive coarse filtering before more costly comparison.
 
