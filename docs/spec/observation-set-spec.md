@@ -30,7 +30,7 @@ POP is not the domain authority. A future database, object store, stream protoco
 
 ## Scope
 
-This specification defines Observation Set identity, observation profiles, extracted facts, measurements, evidence representations, provenance requirements, semantic-definition references, package-manifest responsibilities, binary evidence handling, AI-consumption boundaries, and stabilization rules.
+This specification defines Observation Set identity, observation profiles, extracted facts, measurements, derived representations, provenance requirements, semantic-definition references, package-manifest responsibilities, binary evidence handling, AI-consumption boundaries, and stabilization rules.
 
 It does not yet freeze the exact POP JSON Schema, directory layout, preview transform, or base observation profile.
 
@@ -63,7 +63,7 @@ Two runs MAY produce byte-identical Observation Sets while remaining distinct ex
 
 ## Observation profile
 
-An Observation Profile defines which observations and evidence representations are requested together.
+An Observation Profile defines which observations and derived representations are requested together.
 
 Examples:
 
@@ -111,7 +111,7 @@ A measurement record conceptually contains:
 - value;
 - unit/dimension;
 - validity;
-- measurement-domain reference;
+- signal-domain reference;
 - procedure-definition reference;
 - observation-run reference;
 - input representation reference;
@@ -121,11 +121,11 @@ A measurement record conceptually contains:
 
 Wire formats MAY compact repeated references through tables or IDs.
 
-### Evidence representations
+### Derived representations
 
 Binary or structured derived evidence such as previews, maps, masks, distributions, or tensors.
 
-Each evidence asset conceptually contains:
+Each derived representation conceptually contains:
 
 - stable role/definition ID;
 - media type;
@@ -247,7 +247,7 @@ Their exact transforms are not yet Core. Before stabilization, each transform MU
 
 Diagnostic previews MUST NOT inherit an undocumented camera-maker look.
 
-An embedded camera JPEG MAY be included as a separate evidence role because it can provide useful contextual information, but it MUST be identified as an in-camera rendering rather than RAW-neutral evidence.
+An embedded camera JPEG MAY be included as a separate representation role because it can provide useful contextual information, but it MUST be identified as an in-camera rendering rather than RAW-neutral evidence.
 
 ## Package manifest
 
@@ -276,7 +276,7 @@ The following example is illustrative, not yet a stable schema:
   "implementations": {},
   "facts": [],
   "measurements": [],
-  "evidence": []
+  "representations": []
 }
 ```
 
@@ -291,7 +291,7 @@ A convenient v0 implementation MAY use:
 ```text
 <source>.pop/
   manifest.json
-  evidence/
+  representations/
     preview-neutral.webp
     preview-highlight.webp
     preview-shadow.webp
@@ -374,6 +374,6 @@ Before a base observation profile is declared stable, the project SHOULD verify:
 
 ## Stabilization rule
 
-A candidate measurement or evidence role SHOULD enter the stable base profile only when at least one downstream decision has demonstrated that the information materially improves a useful task or provides necessary diagnostic traceability.
+A candidate measurement or representation role SHOULD enter the stable base profile only when at least one downstream decision has demonstrated that the information materially improves a useful task or provides necessary diagnostic traceability.
 
 The default response to an uncertain future requirement is an extension, not expansion of Core.
