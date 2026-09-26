@@ -173,6 +173,7 @@
             "boolean",
             "integer",
             "number",
+            "rational",
             "string",
             "array",
             "object",
