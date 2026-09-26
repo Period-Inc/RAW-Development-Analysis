@@ -73,6 +73,10 @@ Fixture source files remain outside Git when licensing/privacy/size requires it.
 
 Evaluate at least one practical RAW decoder implementation.
 
+The first concrete characterization path is defined in `docs/raw-decoder-characterization-plan.md`.
+
+The initial experimental probe MUST inspect unpacked sensor-side data before postprocessing. A normal postprocessed image is not accepted as the canonical starting point for sensor measurements because current LibRaw/rawpy processing may include scaling, white balance, demosaic, brightness, highlight handling, gamma, and color conversion.
+
 The experiment records:
 
 - decoder/library version/build;
@@ -91,12 +95,13 @@ The implementation used for experiments is not promoted into Core semantics.
 
 Candidate domains are tested before Registry promotion.
 
-Likely candidates include:
+The first three candidates are now explicitly ordered:
 
-- source sensor code values before black subtraction;
-- black-subtracted sensor-linear values;
-- black/white-normalized sensor-linear values;
-- optional demosaiced camera-linear RGB.
+1. unpacked visible sensor code values before RDA black subtraction;
+2. black-referenced sensor code values;
+3. black/white-normalized sensor-linear values.
+
+Demosaiced camera-linear RGB remains a later candidate rather than the first measurement domain.
 
 For each candidate, determine exactly which Signal State properties are required to reconstruct meaning.
 
