@@ -7,6 +7,7 @@ import sys
 
 import yaml
 
+from .pop import load_pop, validate_pop, validate_pop_fixture_contract
 from .registry import ROOT, load_registry, validate_fixture_contract, validate_registry
 
 
@@ -28,6 +29,16 @@ def main(argv: list[str] | None = None) -> int:
         default=str(ROOT / "fixtures/definition-registry-cases.yml"),
     )
 
+    validate_pop_cmd = sub.add_parser("validate-pop", help="Validate a POP manifest")
+    validate_pop_cmd.add_argument("path")
+
+    pop_fixtures = sub.add_parser("test-pop-fixtures", help="Run POP conformance fixtures")
+    pop_fixtures.add_argument(
+        "path",
+        nargs="?",
+        default=str(ROOT / "fixtures/photo-observation-package-cases.yml"),
+    )
+
     args = parser.parse_args(argv)
 
     if args.command == "validate-registry":
@@ -38,6 +49,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "test-registry-fixtures":
         document = yaml.safe_load(pathlib.Path(args.path).read_text(encoding="utf-8")) or {}
         failures = validate_fixture_contract(document)
+        _print_json({"result": "valid" if not failures else "invalid", "failures": failures})
+        return 0 if not failures else 1
+
+    if args.command == "validate-pop":
+        result = validate_pop(load_pop(pathlib.Path(args.path)))
+        _print_json(result.as_dict())
+        return 0 if result.result == "valid" else 1
+
+    if args.command == "test-pop-fixtures":
+        document = yaml.safe_load(pathlib.Path(args.path).read_text(encoding="utf-8")) or {}
+        failures = validate_pop_fixture_contract(document)
         _print_json({"result": "valid" if not failures else "invalid", "failures": failures})
         return 0 if not failures else 1
 
