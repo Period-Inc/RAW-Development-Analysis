@@ -18,13 +18,13 @@ relations: []
 
 This document defines the stable semantic domain of RAW Development Analysis.
 
-The core exists to describe how captured photographic source data becomes evidence, interpretation, development decisions, and tool-specific development artifacts without making any current RAW decoder, AI model, development application, or metadata format part of the permanent meaning of the system.
+The core exists to describe how photographic source data becomes durable observations and derived information that can support comparison, indexing, retrieval, interpretation, development decisions, and other downstream uses without making any current RAW decoder, AI model, search engine, development application, or metadata format part of the permanent meaning of the system.
 
 The design target is decades. Implementations are expected to change substantially while these semantic boundaries remain useful.
 
 ## Scope
 
-This specification defines the durable domain vocabulary, semantic boundaries, and invariants shared by analyzers, AI or human reasoning actors, development-decision components, target adapters, and evaluation tooling.
+This specification defines the durable domain vocabulary, semantic boundaries, and invariants shared by analyzers, comparison and retrieval components, AI or human reasoning actors, development-decision components, target adapters, and evaluation tooling.
 
 It does not define a concrete package layout, RAW decoding library, AI prompt, Lightroom workflow, or application UI.
 
@@ -42,9 +42,11 @@ The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY are normative requirem
 
 ## Domain statement
 
-RAW Development Analysis is a system for producing traceable development decisions from photographic source data.
+RAW Development Analysis is a technical foundation for producing traceable, reusable observations and derived information from photographic source data.
 
-A common dependency path is:
+RAW development is the first application domain, not the only valid consumer of the observation foundation.
+
+One common RAW-development dependency path is:
 
 ```text
 Source Artifact
@@ -98,9 +100,11 @@ Source metadata is not part of Source Artifact semantics merely because it is st
 
 ### 2. Observation Run and Observation Set
 
-An **Observation Run** is an execution event: a particular implementation, configuration, dependency set, and procedure collection acting on one or more declared input representations of a Source Artifact.
+An **Observation Run** is an execution event: a particular implementation, configuration, dependency set, and procedure collection acting on one or more declared input representations of one or more Source Artifacts or previously derived representations.
 
 An **Observation Set** is the immutable result of an Observation Run. It contains observations and references the run that produced them.
+
+An Observation MAY describe one source or a relation across multiple declared inputs. Relational observations MUST identify their input roles so that a pairwise or multi-input result cannot be misread as a property of one Source Artifact.
 
 Run identity and result identity are different. Two repeated runs MAY produce semantically equivalent or byte-identical Observation Sets while remaining distinct execution events.
 
