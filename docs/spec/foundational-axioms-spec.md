@@ -53,6 +53,32 @@ When a design choice conflicts with an axiom, the axiom takes precedence.
 
 A specification MUST NOT weaken an axiom merely for implementation convenience, performance, compatibility with a vendor, or product requirements.
 
+## Simplicity as a preservation strategy
+
+The foundational layer MUST remain deliberately small and simple.
+
+This is not aesthetic minimalism. It is a preservation strategy.
+
+Complex systems depend on more assumptions, more context, more conventions, and more hidden knowledge. Over long periods, those dependencies are more likely to disappear.
+
+Simple distinctions are easier to:
+
+- explain;
+- copy;
+- translate;
+- reimplement;
+- verify;
+- migrate;
+- preserve across organizations, cultures, technologies, and centuries.
+
+Therefore RDA SHOULD place only principles that are both fundamental and difficult to reduce further in this layer.
+
+Anything that can safely live in the Core Domain, a profile, a procedure, an implementation, or an application SHOULD remain outside the Foundational Axioms.
+
+The preservation premise is:
+
+> Simpler things are more likely to survive.
+
 ## Axiom 1 — Describe before deciding
 
 **The system describes the world before deciding what should be done about it.**
