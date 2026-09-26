@@ -192,8 +192,11 @@ Examples include:
 - display-referred sRGB;
 - log-encoded diagnostic domain.
 
+A domain definition SHOULD reuse recognized imaging terminology where it precisely applies. In particular, scene-referred, original-referred, picture-referred, and output-referred image-state concepts SHOULD follow established color-imaging definitions rather than project-local redefinitions.
+
 A domain definition SHOULD specify, as applicable:
 
+- image state when meaningful;
 - channel semantics;
 - black/white normalization;
 - demosaic state;
