@@ -42,25 +42,27 @@ The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY are normative requirem
 
 RAW Development Analysis is a system for producing traceable development decisions from photographic source data.
 
-Its canonical flow is:
+A common dependency path is:
 
 ```text
-Source Asset
+Source Artifact
   -> Observation Set
   -> Interpretation
   -> Development Decision
   -> Target Encoding
 ```
 
+This diagram is not a required linear pipeline. The authoritative structure is a provenance/dependency graph. An Interpretation MAY request additional Observation Runs; a Development Decision MAY be revised after target execution or evaluation; multiple Interpretations and Decisions MAY share the same Observation Set.
+
 A Development Context may influence Interpretation and Development Decision. It MUST NOT alter or be represented as an Observation.
 
-Evaluation may compare any resulting decision or rendering with a reference, human choice, prior decision, or acceptance criterion. Evaluation is downstream evidence, not a retroactive rewrite of the original observation.
+Evaluation may compare any resulting decision or rendered result with a reference, human choice, prior decision, or acceptance criterion. Evaluation is downstream evidence, not a retroactive rewrite of the original observation.
 
 ## Core invariants
 
-1. **The source is immutable.** The system MUST NOT require mutation of the original captured asset.
+1. **Source artifacts are immutable content objects.** Any byte-changing conversion or rewrite creates a distinct Source Artifact linked by provenance; a filesystem copy alone does not change photographic meaning.
 2. **Observation and interpretation are different kinds of information.** A statement about what was measured MUST NOT silently contain a judgment about what should be done.
-3. **Every derived observation is attributable.** Its source identity, procedure identity, procedure version, and relevant parameters MUST be recoverable.
+3. **Every derived observation is attributable.** Its source identity, observation definition, procedure definition, execution identity, implementation/build identity, and materially relevant parameters MUST be recoverable.
 4. **Unknown is a first-class state.** Missing, unsupported, unavailable, and not-applicable MUST NOT be collapsed into zero, false, empty string, or guessed values.
 5. **Lossy evidence is labeled as lossy.** A preview, map, thumbnail, or compressed representation MUST NOT be presented as equivalent to sensor/source data.
 6. **Current tools are adapters.** Lightroom, Adobe Camera Raw, XMP, libraw, ExifTool, a particular AI provider, and a particular camera maker MUST NOT define Core semantics.
@@ -71,34 +73,42 @@ Evaluation may compare any resulting decision or rendering with a reference, hum
 
 ## Aggregate model
 
-### 1. Source Asset
+### 1. Source Artifact
 
-A Source Asset is captured or otherwise authoritative input media.
+A Source Artifact is an immutable byte-bearing input object accepted by the system.
 
-Examples include a camera RAW file, DNG, TIFF scan, or another source representation accepted by an adapter.
+Examples include an original camera RAW file, a DNG created from another source, or a future capture container. Non-RAW inputs MAY be supported by adapters, but they do not expand the guaranteed RAW-development scope of this project.
 
-A Source Asset has:
+A Source Artifact has:
 
-- stable source identity;
-- cryptographic content identity when bytes are available;
+- stable artifact identity;
+- one or more cryptographic content digests when bytes are available;
 - media/container type;
 - byte length when known;
-- capture metadata that can be extracted without interpretive judgment;
-- one or more source planes or embedded representations when the source format exposes them.
+- optional lineage relations to other Source Artifacts;
+- optional capture/group relations when multiple artifacts are known to originate from the same capture event.
 
-A filename or filesystem path is a locator, not identity.
+A filename, filesystem path, cloud object key, or library record is a locator, not artifact identity.
 
-A Source Asset MAY have multiple byte-identical or semantically equivalent physical copies. Copy location is not part of its photographic meaning.
+A byte-identical physical copy MAY share the same content identity. A byte-changing conversion, metadata rewrite, normalization, or DNG conversion is a new Source Artifact even when it represents the same photographic capture.
 
-### 2. Observation Set
+Source metadata is not part of Source Artifact semantics merely because it is stored inside the file. Once decoded, it is represented as Source Assertions with provenance.
 
-An Observation Set is a reproducible record of what a specific observation procedure obtained from a Source Asset.
+### 2. Observation Run and Observation Set
+
+An **Observation Run** is an execution event: a particular implementation, configuration, dependency set, and procedure collection acting on one or more declared input representations of a Source Artifact.
+
+An **Observation Set** is the immutable result of an Observation Run. It contains observations and references the run that produced them.
+
+Run identity and result identity are different. Two repeated runs MAY produce semantically equivalent or byte-identical Observation Sets while remaining distinct execution events.
 
 An Observation Set is composed of three information classes:
 
-#### 2.1 Extracted Fact
+#### 2.1 Source Assertion
 
-A value copied or decoded from the source without photographic evaluation.
+A Source Assertion is a value declared or encoded by the source and decoded by a procedure without adding a photographic-development judgment.
+
+It is an assertion **from the source**, not necessarily an independently verified fact about the physical scene or camera.
 
 Examples:
 
@@ -111,7 +121,7 @@ Examples:
 - sensor black/white levels when present;
 - as-shot white-balance coefficients when present.
 
-An Extracted Fact MUST identify its source field or extraction procedure when ambiguity is possible.
+A Source Assertion MUST identify its source field or extraction procedure when ambiguity is possible. Conflicting source assertions MAY coexist if provenance distinguishes them.
 
 #### 2.2 Measurement
 
@@ -161,9 +171,9 @@ An Evidence Representation MUST declare:
 - transfer function when applicable;
 - lossy/lossless status;
 - compression/encoding;
-- relationship to the Source Asset.
+- relationship to the Source Artifact.
 
-Evidence Representation is evidence for reasoning. It is not a substitute for the Source Asset.
+Evidence Representation is evidence for reasoning. It is not a substitute for the Source Artifact.
 
 ### 3. Measurement Domain
 
@@ -193,18 +203,35 @@ A domain definition SHOULD specify, as applicable:
 
 ### 4. Analysis Procedure
 
-An Analysis Procedure is the reproducible method used to produce an Extracted Fact, Measurement, or Evidence Representation.
+An Analysis Procedure defines the semantic method used to produce a Source Assertion, Measurement, or Evidence Representation.
 
-Procedure identity is semantic; executable filename is not.
+Procedure identity describes **what method means**, not which executable happened to run it.
 
-A procedure record MUST identify:
+A procedure definition MUST identify:
 
-- procedure name or stable ID;
-- implementation/version;
-- parameters that materially affect output;
-- decoder or dependent procedure versions when they materially affect output.
+- stable procedure ID;
+- procedure version;
+- required inputs and their domains;
+- algorithmic or transformation semantics sufficient to distinguish materially different methods;
+- parameters that are part of the procedure contract.
 
-Two values with the same field name but produced by materially different procedures are not assumed equivalent.
+Two outputs with the same field name but produced by materially different procedures are not assumed equivalent.
+
+### 5. Procedure Implementation and Execution
+
+A **Procedure Implementation** is an executable realization of an Analysis Procedure. Multiple implementations MAY conform to the same procedure definition.
+
+An **Observation Run** records the execution provenance required to explain an actual result, including as applicable:
+
+- procedure-definition IDs and versions;
+- implementation name/version/build or immutable code identity;
+- decoder/library dependencies whose behavior is material;
+- runtime parameters;
+- execution environment when it can materially affect results;
+- execution timestamp;
+- input Source Artifact and representation identities.
+
+Reproducibility claims MUST state whether they mean semantic equivalence, tolerance-bounded numeric equivalence, or byte-identical output.
 
 ### 5. Development Context
 
@@ -246,27 +273,13 @@ Interpretation SHOULD record:
 
 Interpretive labels MUST NOT be inserted into the Observation Set as if they were measurements.
 
-### 7. Development Intent
-
-Development Intent expresses a desired photographic or rendering change independently of a specific application's storage format when such independence is semantically possible.
-
-Examples:
-
-- global exposure compensation in EV;
-- neutralize a measured chromatic cast under a stated reference;
-- retain highlight separation;
-- raise subject-relative luminance;
-- preserve local contrast.
-
-Some development operations cannot be meaningfully normalized across vendors. Such operations MUST remain explicitly target-specific rather than being given a false universal meaning.
-
-### 8. Development Decision
+### 7. Development Decision
 
 A Development Decision is an explicit choice of development action based on an Observation Set, optional Interpretation, and Development Context.
 
 A decision MAY contain:
 
-- vendor-neutral intents;
+- target-neutral intent assertions where a stable semantic definition actually exists;
 - bounded numeric operations with defined semantics;
 - target-specific operations;
 - confidence;
@@ -275,7 +288,7 @@ A decision MAY contain:
 
 A baseline-plus-delta decision is valid, but the baseline identity MUST be explicit.
 
-### 9. Target Model
+### 8. Target Model
 
 A Target Model describes the capabilities and parameter semantics of a concrete development system.
 
@@ -288,7 +301,7 @@ Examples:
 
 The Target Model is an adapter-side concept. It MUST NOT redefine Observation semantics.
 
-### 10. Target Encoding
+### 9. Target Encoding
 
 A Target Encoding is the serialized artifact that applies or communicates a Development Decision to a Target Model.
 
@@ -300,6 +313,21 @@ Examples:
 - future metadata or API request.
 
 Target Encoding is derived and replaceable. It is never the canonical meaning of the Development Decision.
+
+### 10. Rendered Result
+
+A Rendered Result is a materialized visual or numeric output produced by applying a Development Decision, directly or through a Target Encoding, using a declared Target Model or renderer.
+
+A Rendered Result SHOULD retain enough provenance to identify:
+
+- Source Artifact;
+- Development Decision;
+- Target Model / renderer version;
+- Target Encoding when used;
+- output color/transfer domain;
+- material rendering parameters.
+
+Rendered Results are derived artifacts. They do not overwrite Source Artifacts or Observations.
 
 ### 11. Evaluation Record
 
@@ -326,6 +354,7 @@ Source identity
   -> decision identity
   -> target model identity
   -> target encoding identity
+  -> rendered result identity (when materialized)
 ```
 
 A system MAY materialize only part of this chain, but it MUST NOT erase provenance required to distinguish materially different results.
@@ -381,7 +410,7 @@ A **Photo Observation Package (POP)** MAY serialize an Observation Set and its E
 
 POP is a serialization profile, not the domain itself.
 
-Changing POP layout MUST NOT require changing the meaning of Source Asset, Observation, Interpretation, or Development Decision.
+Changing POP layout MUST NOT require changing the meaning of Source Artifact, Observation, Interpretation, or Development Decision.
 
 ## Current-project mapping
 
@@ -389,8 +418,9 @@ The current concept maps as follows:
 
 | Current term | Core concept |
 | --- | --- |
-| RAW file | Source Asset |
-| EXIF / RAW metadata extraction | Extracted Facts |
+| RAW file | Source Artifact |
+| converted DNG | distinct Source Artifact linked by lineage |
+| EXIF / RAW metadata extraction | Source Assertions |
 | histogram / clipping / noise calculation | Measurements |
 | neutral / highlight / shadow small previews | Evidence Representations |
 | intermediate package | serialization of an Observation Set (candidate: POP) |
@@ -414,5 +444,7 @@ A proposed Core concept SHOULD pass these tests:
 5. **Fifty-year audit test** — can a future reader determine what was observed, how it was observed, what was inferred, and what was decided?
 6. **No-hidden-judgment test** — can a measurement be explained without using words such as good, appropriate, too dark, natural, or beautiful?
 7. **No-false-universality test** — is a vendor-specific parameter kept vendor-specific when no stable cross-vendor semantics exist?
+8. **Re-execution test** — can two executions of the same semantic procedure be distinguished from the Observation Set they produce?
+9. **Lineage test** — does a byte-changing conversion create a new Source Artifact while preserving its derivation from the prior artifact?
 
 If a concept fails these tests, it SHOULD live in an adapter, profile, experiment, or extension rather than Core.
