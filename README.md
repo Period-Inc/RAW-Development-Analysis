@@ -11,15 +11,19 @@ The project deliberately separates four concerns that are often conflated:
 
 AI, Lightroom, XMP, a particular RAW decoder, and any specific camera format are replaceable participants. They are not the domain model.
 
-## Core flow
+## Core dependency model
+
+A common execution path is:
 
 ```text
-Source Asset
+Source Artifact
   -> Observation
   -> Interpretation
   -> Development Decision
   -> Target Encoding
 ```
+
+This is a dependency model, not a mandatory linear pipeline. Interpretation may request additional observations, decisions may be revised after rendering/evaluation, and multiple actors may operate on the same immutable observations.
 
 A development context (for example a baseline preset) may inform interpretation and decision, but it never changes what was observed from the source.
 
