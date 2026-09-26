@@ -314,7 +314,8 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/objectId"
-          }
+          },
+          "description": "Legacy/simple ordered input references; role-qualified input_bindings are preferred for durable multi-input semantics."
         },
         "output_observation_refs": {
           "type": "array",
@@ -326,6 +327,26 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/objectId"
+          }
+        },
+        "input_bindings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "role",
+              "ref"
+            ],
+            "properties": {
+              "role": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ref": {
+                "$ref": "#/$defs/objectId"
+              }
+            },
+            "additionalProperties": false
           }
         }
       },
