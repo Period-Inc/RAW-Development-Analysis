@@ -44,19 +44,22 @@ Development preferences and target-specific adjustment policy MUST remain outsid
 
 ## Observation Set identity
 
-An Observation Set represents one observation run over one Source Asset under one declared analysis configuration.
+An Observation Run represents one execution over a Source Artifact under one declared analysis configuration.
 
-Its identity MUST distinguish at least:
+An Observation Set is the immutable result produced by that run.
+
+Run identity MUST distinguish at least:
 
 - source content identity;
 - observation profile identity/version;
+- analysis-procedure definitions/versions;
 - analyzer implementation/build identity;
-- materially relevant decoder identity/version;
-- materially relevant procedure parameters.
+- materially relevant decoder/dependency identities and versions;
+- materially relevant runtime parameters.
 
-Two runs MAY produce byte-identical outputs and still have different run identities.
+Observation Set identity MAY be content-addressed independently of Run identity.
 
-A deterministic content digest MAY additionally identify an exact serialized result.
+Two runs MAY produce byte-identical Observation Sets while remaining distinct execution events. Conversely, a materially changed implementation or dependency MUST NOT be hidden merely because output happens to compare equal in one case.
 
 ## Observation profile
 
@@ -78,7 +81,7 @@ A package MUST keep the following classes distinguishable:
 
 ### Source reference
 
-Identifies the Source Asset without requiring the source bytes to be embedded.
+Identifies the Source Artifact without requiring the source bytes to be embedded.
 
 Required semantic information:
 
@@ -90,11 +93,13 @@ Required semantic information:
 
 A POP SHOULD NOT embed the original RAW by default.
 
-### Extracted facts
+### Source assertions
 
-Facts decoded from metadata or source structures.
+Values declared or encoded by source metadata or source structures and decoded without adding a photographic-development judgment.
 
-Every fact SHOULD identify the extraction source/path or procedure if different decoders may disagree.
+A Source Assertion is not automatically an independently verified physical fact. For example, camera-reported ISO, focal length, or white-balance coefficients are assertions attributable to the source and extraction procedure.
+
+Every assertion SHOULD identify the extraction source/path or procedure if different decoders may disagree. Conflicting assertions MAY coexist when their provenance differs.
 
 ### Measurements
 
@@ -107,7 +112,8 @@ A measurement record conceptually contains:
 - unit/dimension;
 - validity;
 - measurement-domain reference;
-- procedure reference;
+- procedure-definition reference;
+- observation-run reference;
 - input representation reference;
 - spatial-scope reference;
 - optional measurement uncertainty;
@@ -136,9 +142,18 @@ A consumer MUST be able to distinguish a display preview from a measurement map 
 
 ### Provenance
 
-The package MUST be able to resolve every derived item to the procedure that produced it.
+The package MUST be able to resolve every derived item through both semantic method and execution provenance.
 
-Provenance SHOULD avoid repeating full software metadata on every measurement. A manifest MAY define procedure records once and reference them by local IDs.
+At minimum, the package MUST distinguish:
+
+- observation definition — what the value means;
+- analysis procedure — what method defines the computation;
+- procedure implementation — which executable realization was used;
+- observation run — which execution produced this result.
+
+Provenance SHOULD avoid repeating full software metadata on every measurement. A manifest MAY define definitions, procedures, implementations, and run records once and reference them by local IDs.
+
+An interoperability profile MAY map these concepts to established provenance models. The POP wire format MUST NOT require consumers to treat local identifiers as globally meaningful when they are only package-scoped.
 
 ## Definitions over field names
 
@@ -252,11 +267,13 @@ The following example is illustrative, not yet a stable schema:
     "media_type": "image/x-sony-arw"
   },
   "run": {
-    "analyzer": "rda-analyzer",
-    "version": "0.1.0"
+    "id": "run-...",
+    "implementation": "impl-rda-analyzer-...",
+    "procedures": ["proc-..."]
   },
   "definitions": {},
   "procedures": {},
+  "implementations": {},
   "facts": [],
   "measurements": [],
   "evidence": []
