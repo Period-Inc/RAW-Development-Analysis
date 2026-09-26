@@ -11,6 +11,30 @@ The project deliberately separates four concerns that are often conflated:
 
 AI, Lightroom, XMP, a particular RAW decoder, and any specific camera format are replaceable participants. They are not the domain model.
 
+## Foundation hierarchy
+
+RDA separates the deepest principles from the evolving domain model:
+
+```text
+Foundational Axioms
+        ↓
+Core Domain
+        ↓
+Specifications / Profiles
+        ↓
+Serialization / Procedures / Implementations
+        ↓
+Applications / Services
+```
+
+The Foundational Axioms are the "core of the core": changing them is an identity-level change, not normal feature evolution.
+
+The deepest preservation rule is:
+
+> Preserve the distinction between the world, its records, our interpretations, and our decisions.
+
+See `docs/spec/foundational-axioms-spec.md`.
+
 ## Core dependency model
 
 A common execution path is:
