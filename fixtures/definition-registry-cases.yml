@@ -1,0 +1,202 @@
+rda_fixture: "0.1"
+fixture_version: "0.1.0"
+
+cases:
+  - id: valid-empty-provisional-registry
+    expect: valid
+    registry:
+      rda_registry: "0.1"
+      registry_id: rda-fixture
+      registry_version: "0.1.0"
+      namespace: rda
+      status: provisional
+      definitions: []
+
+  - id: valid-minimal-definition-graph
+    expect: valid
+    registry:
+      rda_registry: "0.1"
+      registry_id: rda-fixture
+      registry_version: "0.1.0"
+      namespace: rda
+      status: provisional
+      definitions:
+        - id: rda.signal-domain.fixture.linear
+          version: "1.0.0"
+          kind: signal_domain
+          stability: stable
+          title: Fixture Linear Signal Domain
+          description: Synthetic signal domain used only by conformance fixtures.
+          state_contract:
+            required_properties: [numeric_range]
+
+        - id: rda.observation.fixture.scalar
+          version: "1.0.0"
+          kind: observation
+          observation_kind: measurement
+          stability: stable
+          title: Fixture Scalar Observation
+          description: Synthetic scalar measurement used only by conformance fixtures.
+          value_contract:
+            type: number
+            unit: "1"
+          signal_domain_refs:
+            - id: rda.signal-domain.fixture.linear
+              version: "1.0.0"
+
+        - id: rda.procedure.fixture.scalar
+          version: "1.0.0"
+          kind: procedure
+          stability: stable
+          title: Fixture Scalar Procedure
+          description: Synthetic procedure used only by conformance fixtures.
+          inputs:
+            - role: input
+              signal_domain:
+                id: rda.signal-domain.fixture.linear
+                version: "1.0.0"
+          outputs:
+            - id: rda.observation.fixture.scalar
+              version: "1.0.0"
+          parameters: []
+          determinism: deterministic
+
+  - id: invalid-duplicate-definition-version
+    expect: invalid
+    findings: [RDA-REGISTRY-DEFINITION-DUPLICATE]
+    mutation:
+      from: valid-minimal-definition-graph
+      append_definition:
+        id: rda.observation.fixture.scalar
+        version: "1.0.0"
+        kind: observation
+        observation_kind: measurement
+        stability: stable
+        title: Duplicate
+        description: Same identity and version must not appear twice.
+        value_contract:
+          type: number
+
+  - id: invalid-id-kind-mismatch
+    expect: invalid
+    findings: [RDA-REGISTRY-ID-KIND-MISMATCH]
+    mutation:
+      from: valid-minimal-definition-graph
+      replace:
+        definition:
+          id: rda.observation.fixture.scalar
+          version: "1.0.0"
+        with:
+          id: rda.procedure.fixture.wrong-kind
+          version: "1.0.0"
+          kind: observation
+          observation_kind: measurement
+          stability: stable
+          title: Wrong Namespace
+          description: Observation kind declared under procedure namespace.
+          value_contract:
+            type: number
+
+  - id: invalid-missing-reference
+    expect: invalid
+    findings: [RDA-REGISTRY-REFERENCE-MISSING]
+    mutation:
+      from: valid-minimal-definition-graph
+      replace_reference:
+        in:
+          id: rda.procedure.fixture.scalar
+          version: "1.0.0"
+        path: outputs[0]
+        value:
+          id: rda.observation.fixture.missing
+          version: "1.0.0"
+
+  - id: invalid-procedure-output-kind
+    expect: invalid
+    findings: [RDA-REGISTRY-PROCEDURE-OUTPUT-INVALID]
+    mutation:
+      from: valid-minimal-definition-graph
+      replace_reference:
+        in:
+          id: rda.procedure.fixture.scalar
+          version: "1.0.0"
+        path: outputs[0]
+        value:
+          id: rda.signal-domain.fixture.linear
+          version: "1.0.0"
+
+  - id: invalid-procedure-domain-kind
+    expect: invalid
+    findings: [RDA-REGISTRY-PROCEDURE-DOMAIN-INVALID]
+    mutation:
+      from: valid-minimal-definition-graph
+      replace_reference:
+        in:
+          id: rda.procedure.fixture.scalar
+          version: "1.0.0"
+        path: inputs[0].signal_domain
+        value:
+          id: rda.observation.fixture.scalar
+          version: "1.0.0"
+
+  - id: invalid-supersession-cycle
+    expect: invalid
+    findings: [RDA-REGISTRY-SUPERSESSION-CYCLE]
+    registry:
+      rda_registry: "0.1"
+      registry_id: rda-fixture
+      registry_version: "0.1.0"
+      namespace: rda
+      status: provisional
+      definitions:
+        - id: rda.observation.fixture.a
+          version: "1.0.0"
+          kind: observation
+          observation_kind: measurement
+          stability: deprecated
+          title: Fixture A
+          description: Cycle fixture A.
+          value_contract: {type: number}
+          supersedes:
+            - {id: rda.observation.fixture.b, version: "1.0.0"}
+        - id: rda.observation.fixture.b
+          version: "1.0.0"
+          kind: observation
+          observation_kind: measurement
+          stability: deprecated
+          title: Fixture B
+          description: Cycle fixture B.
+          value_contract: {type: number}
+          supersedes:
+            - {id: rda.observation.fixture.a, version: "1.0.0"}
+
+  - id: invalid-stable-depends-on-provisional
+    expect: invalid
+    findings: [RDA-REGISTRY-STABLE-DEPENDS-PROVISIONAL]
+    registry:
+      rda_registry: "0.1"
+      registry_id: rda-fixture
+      registry_version: "0.1.0"
+      namespace: rda
+      status: provisional
+      definitions:
+        - id: rda.signal-domain.fixture.provisional
+          version: "0.1.0"
+          kind: signal_domain
+          stability: provisional
+          title: Provisional Fixture Domain
+          description: Provisional dependency fixture.
+          state_contract:
+            required_properties: []
+        - id: rda.observation.fixture.stable
+          version: "1.0.0"
+          kind: observation
+          observation_kind: measurement
+          stability: stable
+          title: Stable Fixture Observation
+          description: Stable definition must not silently depend on provisional semantics.
+          value_contract:
+            type: number
+          signal_domain_refs:
+            - id: rda.signal-domain.fixture.provisional
+              version: "0.1.0"
