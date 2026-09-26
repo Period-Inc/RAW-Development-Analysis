@@ -94,7 +94,7 @@ If an improved algorithm produces a materially different measurement, it MUST do
 
 ## Recalculation
 
-Observation data is normally regenerable from the Source Asset, but regeneration is not assumed to be bit-identical across time.
+Observation data is normally regenerable from the Source Artifact, but regeneration is not assumed to be bit-identical across time.
 
 A regenerated Observation Set MUST carry a new provenance identity when any material procedure, dependency, parameter, or source representation changed.
 
@@ -138,7 +138,7 @@ Media provenance systems MAY additionally carry RDA artifacts, assertions, linea
 
 ## Source identity and content addressing
 
-When source bytes are available, Source Assets SHOULD use a cryptographic digest as a content identity component.
+When source bytes are available, Source Artifacts SHOULD use a cryptographic digest as a content identity component.
 
 Derived binary assets such as maps and previews SHOULD also carry a digest.
 
