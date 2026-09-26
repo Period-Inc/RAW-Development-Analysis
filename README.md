@@ -29,7 +29,13 @@ A development context (for example a baseline preset) may inform interpretation 
 
 ## Longevity objective
 
-The design target is measured in decades. The core therefore prefers semantic invariants, provenance, explicit measurement domains, stable identities, and versioned adapters over vendor controls or current AI APIs.
+The preservation horizon is intentionally extreme: **1,000 years**.
+
+RDA does not assume that today's software, vendors, file formats, programming languages, storage systems, organizations, or even current project infrastructure will survive that horizon.
+
+The design therefore optimizes for semantic recoverability across generations of implementations. It prefers explicit meaning, provenance, stable identities, open and inspectable representations, versioned definitions, reconstructable transformations, and preservation of ambiguity over dependence on contemporary tools.
+
+The objective is not to keep one implementation running for 1,000 years. The objective is that a future system can still determine **what was observed, how it was produced, what was inferred, what was decided, and what remained unknown**.
 
 ## Documentation
 
