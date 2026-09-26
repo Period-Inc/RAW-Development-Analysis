@@ -194,8 +194,21 @@ Each invocation records:
 - Run reference;
 - Analysis Procedure Definition reference;
 - runtime parameters;
-- declared inputs;
+- declared input bindings;
 - produced Observation IDs and/or Signal State IDs where convenient.
+
+Input bindings SHOULD be role-qualified rather than represented only as an ordered list. This is required for durable multi-input semantics such as `query` versus `candidate`, `left` versus `right`, source versus reference, or other directional comparisons.
+
+A role-qualified binding conceptually contains:
+
+```json
+{
+  "role": "query",
+  "ref": "source-or-derived-object-id"
+}
+```
+
+If a procedure definition declares ordered/role-specific inputs, the invocation MUST preserve those roles.
 
 The runtime parameters MUST preserve values that materially affect output.
 
@@ -382,15 +395,16 @@ A conforming POP semantic validator MUST eventually verify at least:
 1. all object IDs are unique within their declared scope;
 2. all internal references resolve;
 3. every Definition Reference resolves through the semantic closure/Registry;
-4. Observation value shape conforms to its Observation Definition;
-5. non-`known` observations do not carry fabricated values;
-6. Measurements requiring Signal State have one;
-7. Signal State properties satisfy the referenced Signal Domain Definition;
-8. Procedure Invocations conform to their Analysis Procedure Definitions;
-9. derived observations resolve to a producing invocation/run;
-10. asset references resolve and digest checks succeed when bytes are present;
-11. quantitative Derived Representations declare sufficient numeric/color semantics;
-12. source assertions retain a source locator when the procedure can provide one.
+4. multi-input procedure invocations preserve required input roles;
+5. Observation value shape conforms to its Observation Definition;
+6. non-`known` observations do not carry fabricated values;
+7. Measurements requiring Signal State have one;
+8. Signal State properties satisfy the referenced Signal Domain Definition;
+9. Procedure Invocations conform to their Analysis Procedure Definitions;
+10. derived observations resolve to a producing invocation/run;
+11. asset references resolve and digest checks succeed when bytes are present;
+12. quantitative Derived Representations declare sufficient numeric/color semantics;
+13. source assertions retain a source locator when the procedure can provide one.
 
 These checks will be promoted into stable finding codes and fixtures before POP v0.1 is declared stable.
 
