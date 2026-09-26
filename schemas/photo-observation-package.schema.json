@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Period-Inc/RAW-Development-Analysis/schemas/photo-observation-package.schema.json",
+  "title": "RDA Photo Observation Package Manifest",
+  "type": "object",
+  "required": [
+    "rda_pop",
+    "package_profile",
+    "sources",
+    "semantic_closure",
+    "implementations",
+    "runs",
+    "procedure_invocations",
+    "signal_states",
+    "observations",
+    "assets"
+  ],
+  "properties": {
+    "rda_pop": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "package_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "package_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/sourceArtifact"}
+    },
+    "semantic_closure": {
+      "$ref": "#/$defs/semanticClosure"
+    },
+    "implementations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/implementation"}
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/run"}
+    },
+    "procedure_invocations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/procedureInvocation"}
+    },
+    "signal_states": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/signalState"}
+    },
+    "observations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/observation"}
+    },
+    "assets": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/asset"}
+    },
+    "coordinate_spaces": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/coordinateSpace"}
+    },
+    "extensions": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "objectId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "definitionRef": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "version": {"$ref": "#/$defs/semver"}
+      },
+      "additionalProperties": false
+    },
+    "digest": {
+      "type": "object",
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"type": "string", "minLength": 1},
+        "value": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "sourceArtifact": {
+      "type": "object",
+      "required": ["source_id", "digests"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/objectId"},
+        "digests": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/digest"}
+        },
+        "media_type": {"type": "string"},
+        "byte_length": {"type": "integer", "minimum": 0},
+        "role": {"type": "string"},
+        "lineage": {"type": "array", "items": {"$ref": "#/$defs/objectId"}},
+        "locator_hints": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "semanticClosure": {
+      "type": "object",
+      "required": ["registry_id", "registry_version", "definitions"],
+      "properties": {
+        "registry_id": {"type": "string", "minLength": 1},
+        "registry_version": {"$ref": "#/$defs/semver"},
+        "registry_digest": {"$ref": "#/$defs/digest"},
+        "definitions": {
+          "type": "array",
+          "items": {"type": "object"}
+        }
+      },
+      "additionalProperties": true
+    },
+    "implementation": {
+      "type": "object",
+      "required": ["implementation_id", "name"],
+      "properties": {
+        "implementation_id": {"$ref": "#/$defs/objectId"},
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string"},
+        "build": {"type": "string"},
+        "source_revision": {"type": "string"},
+        "digests": {"type": "array", "items": {"$ref": "#/$defs/digest"}},
+        "dependencies": {"type": "array", "items": {"type": "object"}}
+      },
+      "additionalProperties": true
+    },
+    "run": {
+      "type": "object",
+      "required": ["run_id", "implementation_ref", "source_refs"],
+      "properties": {
+        "run_id": {"$ref": "#/$defs/objectId"},
+        "implementation_ref": {"$ref": "#/$defs/objectId"},
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/objectId"}
+        },
+        "started_at": {"type": "string", "format": "date-time"},
+        "finished_at": {"type": "string", "format": "date-time"},
+        "configuration": {"type": "object"},
+        "environment": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "procedureInvocation": {
+      "type": "object",
+      "required": ["invocation_id", "run_ref", "procedure_ref", "parameters"],
+      "properties": {
+        "invocation_id": {"$ref": "#/$defs/objectId"},
+        "run_ref": {"$ref": "#/$defs/objectId"},
+        "procedure_ref": {"$ref": "#/$defs/definitionRef"},
+        "parameters": {"type": "object"},
+        "input_refs": {"type": "array", "items": {"$ref": "#/$defs/objectId"}},
+        "output_observation_refs": {"type": "array", "items": {"$ref": "#/$defs/objectId"}},
+        "output_signal_state_refs": {"type": "array", "items": {"$ref": "#/$defs/objectId"}}
+      },
+      "additionalProperties": true
+    },
+    "signalState": {
+      "type": "object",
+      "required": ["signal_state_id", "domain_ref", "properties"],
+      "properties": {
+        "signal_state_id": {"$ref": "#/$defs/objectId"},
+        "domain_ref": {"$ref": "#/$defs/definitionRef"},
+        "source_ref": {"$ref": "#/$defs/objectId"},
+        "parent_signal_state_ref": {"$ref": "#/$defs/objectId"},
+        "produced_by_invocation_ref": {"$ref": "#/$defs/objectId"},
+        "properties": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "rational": {
+      "type": "object",
+      "required": ["kind", "numerator", "denominator"],
+      "properties": {
+        "kind": {"const": "rational"},
+        "numerator": {"type": "integer"},
+        "denominator": {
+          "type": "integer",
+          "not": {"const": 0}
+        }
+      },
+      "additionalProperties": false
+    },
+    "assetRef": {
+      "type": "object",
+      "required": ["kind", "asset_id"],
+      "properties": {
+        "kind": {"const": "asset_ref"},
+        "asset_id": {"$ref": "#/$defs/objectId"}
+      },
+      "additionalProperties": false
+    },
+    "observationValue": {
+      "anyOf": [
+        {"type": "boolean"},
+        {"type": "integer"},
+        {"type": "number"},
+        {"type": "string"},
+        {"type": "array"},
+        {"type": "object"},
+        {"$ref": "#/$defs/rational"},
+        {"$ref": "#/$defs/assetRef"}
+      ]
+    },
+    "observation": {
+      "type": "object",
+      "required": [
+        "observation_id",
+        "definition_ref",
+        "status",
+        "procedure_invocation_ref"
+      ],
+      "properties": {
+        "observation_id": {"$ref": "#/$defs/objectId"},
+        "definition_ref": {"$ref": "#/$defs/definitionRef"},
+        "status": {
+          "enum": ["known", "unknown", "unsupported", "unavailable", "not_applicable"]
+        },
+        "procedure_invocation_ref": {"$ref": "#/$defs/objectId"},
+        "signal_state_ref": {"$ref": "#/$defs/objectId"},
+        "value": {"$ref": "#/$defs/observationValue"},
+        "source_locator": {"type": "object"},
+        "spatial_scope": {"type": "object"},
+        "uncertainty": {"type": "object"},
+        "extensions": {"type": "object"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"const": "known"}},
+            "required": ["status"]
+          },
+          "then": {"required": ["value"]},
+          "else": {"not": {"required": ["value"]}}
+        }
+      ],
+      "additionalProperties": true
+    },
+    "asset": {
+      "type": "object",
+      "required": ["asset_id", "digests", "media_type", "locator"],
+      "properties": {
+        "asset_id": {"$ref": "#/$defs/objectId"},
+        "digests": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/digest"}
+        },
+        "media_type": {"type": "string", "minLength": 1},
+        "byte_length": {"type": "integer", "minimum": 0},
+        "lossy": {"type": "boolean"},
+        "dimensions": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "encoding": {"type": "object"},
+        "locator": {
+          "type": "object",
+          "required": ["type", "value"],
+          "properties": {
+            "type": {"enum": ["package_path", "external_uri"]},
+            "value": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "coordinateSpace": {
+      "type": "object",
+      "required": ["coordinate_space_id", "kind", "properties"],
+      "properties": {
+        "coordinate_space_id": {"$ref": "#/$defs/objectId"},
+        "kind": {
+          "enum": ["source_sensor", "decoded", "oriented", "normalized", "cropped", "custom"]
+        },
+        "source_ref": {"$ref": "#/$defs/objectId"},
+        "properties": {"type": "object"}
+      },
+      "additionalProperties": true
+    }
+  }
+}
