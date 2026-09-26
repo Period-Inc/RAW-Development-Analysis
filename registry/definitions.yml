@@ -1,13 +1,162 @@
 rda_registry: "0.1"
 registry_id: rda-definitions
-registry_version: "0.1.0"
+registry_version: "0.2.0"
 namespace: rda
 status: provisional
 
-# Intentionally empty.
-#
-# The registry structure is now defined, but RAW-development observations such as
-# luminance percentiles, clipping, highlight headroom, noise, and diagnostic
-# preview transforms are not registered until their semantics are specified and
-# validated. Fixtures use synthetic definitions to validate the registry rules.
-definitions: []
+definitions:
+  - id: rda.observation.capture.exif-exposure-time-reported
+    version: "0.1.0"
+    kind: observation
+    observation_kind: source_assertion
+    stability: provisional
+    title: Exif Exposure Time Reported
+    description: >
+      Numeric value reported by the source in the Exif ExposureTime field
+      (tag 33434 / 0x829A). This is a source assertion expressed in seconds,
+      not an independent measurement of the physical exposure duration.
+    value_contract:
+      type: number
+      unit: s
+    procedure_refs:
+      - id: rda.procedure.metadata.read-exif-capture-fields
+        version: "0.1.0"
+    external_references:
+      - authority: CIPA
+        identifier: CIPA DC-X010-2017
+        edition: Exif 2.31 metadata for XMP
+        locator: "7.9 Table 13; ExposureTime; tag 33434 (0x829A)"
+        uri: https://cipa.jp/std/documents/e/DC-X010-2017.pdf
+
+  - id: rda.observation.capture.exif-f-number-reported
+    version: "0.1.0"
+    kind: observation
+    observation_kind: source_assertion
+    stability: provisional
+    title: Exif F Number Reported
+    description: >
+      Numeric value reported by the source in the Exif FNumber field
+      (tag 33437 / 0x829D). This records the source assertion and does not
+      independently verify the effective physical aperture.
+    value_contract:
+      type: number
+      unit: "1"
+    procedure_refs:
+      - id: rda.procedure.metadata.read-exif-capture-fields
+        version: "0.1.0"
+    external_references:
+      - authority: CIPA
+        identifier: CIPA DC-X010-2017
+        edition: Exif 2.31 metadata for XMP
+        locator: "7.9 Table 13; FNumber; tag 33437 (0x829D)"
+        uri: https://cipa.jp/std/documents/e/DC-X010-2017.pdf
+
+  - id: rda.observation.capture.exif-photographic-sensitivity-reported
+    version: "0.1.0"
+    kind: observation
+    observation_kind: source_assertion
+    stability: provisional
+    title: Exif Photographic Sensitivity Reported
+    description: >
+      Integer value reported by the source in the Exif PhotographicSensitivity
+      field (tag 34855 / 0x8827). The value may represent standard output
+      sensitivity (SOS), recommended exposure index (REI), or ISO speed as
+      defined by the applicable Exif/ISO semantics. This definition deliberately
+      does not rename the value to "ISO" without the companion sensitivity
+      semantics needed to justify that interpretation.
+    value_contract:
+      type: integer
+      unit: null
+    procedure_refs:
+      - id: rda.procedure.metadata.read-exif-capture-fields
+        version: "0.1.0"
+    external_references:
+      - authority: CIPA
+        identifier: CIPA DC-X010-2017
+        edition: Exif 2.31 metadata for XMP
+        locator: "7.9 Table 13; PhotographicSensitivity; tag 34855 (0x8827)"
+        uri: https://cipa.jp/std/documents/e/DC-X010-2017.pdf
+      - authority: ISO
+        identifier: ISO 12232
+        locator: "Sensitivity parameter semantics referenced by Exif"
+
+  - id: rda.observation.capture.exif-exposure-bias-reported
+    version: "0.1.0"
+    kind: observation
+    observation_kind: source_assertion
+    stability: provisional
+    title: Exif Exposure Bias Reported
+    description: >
+      Numeric value reported by the source in the Exif ExposureBiasValue field
+      (tag 37380 / 0x9204), expressed in APEX exposure-value units. This is the
+      recorded camera/file assertion, not an RDA recommendation to change
+      development exposure by the same amount.
+    value_contract:
+      type: number
+      unit: "APEX EV"
+    procedure_refs:
+      - id: rda.procedure.metadata.read-exif-capture-fields
+        version: "0.1.0"
+    external_references:
+      - authority: CIPA
+        identifier: CIPA DC-X010-2017
+        edition: Exif 2.31 metadata for XMP
+        locator: "7.9 Table 13; ExposureBiasValue; tag 37380 (0x9204)"
+        uri: https://cipa.jp/std/documents/e/DC-X010-2017.pdf
+
+  - id: rda.observation.capture.exif-focal-length-reported
+    version: "0.1.0"
+    kind: observation
+    observation_kind: source_assertion
+    stability: provisional
+    title: Exif Focal Length Reported
+    description: >
+      Numeric value reported by the source in the Exif FocalLength field
+      (tag 37386 / 0x920A), expressed in millimetres. It records source metadata
+      and does not infer 35 mm-equivalent focal length or field of view.
+    value_contract:
+      type: number
+      unit: mm
+    procedure_refs:
+      - id: rda.procedure.metadata.read-exif-capture-fields
+        version: "0.1.0"
+    external_references:
+      - authority: CIPA
+        identifier: CIPA DC-X010-2017
+        edition: Exif 2.31 metadata for XMP
+        locator: "7.9 Table 13; FocalLength; tag 37386 (0x920A)"
+        uri: https://cipa.jp/std/documents/e/DC-X010-2017.pdf
+
+  - id: rda.procedure.metadata.read-exif-capture-fields
+    version: "0.1.0"
+    kind: procedure
+    stability: provisional
+    title: Read Exif Capture Fields
+    description: >
+      Enumerate applicable Exif metadata structures in a Source Artifact and
+      emit Source Assertions for the registered capture fields encountered.
+      The procedure preserves field identity and source locator. It does not
+      reconcile conflicting values, infer missing values, convert
+      PhotographicSensitivity into a more specific ISO meaning, or make a
+      development judgment.
+    inputs:
+      - role: source_artifact_metadata
+    outputs:
+      - id: rda.observation.capture.exif-exposure-time-reported
+        version: "0.1.0"
+      - id: rda.observation.capture.exif-f-number-reported
+        version: "0.1.0"
+      - id: rda.observation.capture.exif-photographic-sensitivity-reported
+        version: "0.1.0"
+      - id: rda.observation.capture.exif-exposure-bias-reported
+        version: "0.1.0"
+      - id: rda.observation.capture.exif-focal-length-reported
+        version: "0.1.0"
+    parameters: []
+    determinism: deterministic
+    external_references:
+      - authority: CIPA
+        identifier: CIPA DC-X010-2017
+        edition: Exif 2.31 metadata for XMP
+        locator: "7.9 Table 13"
+        uri: https://cipa.jp/std/documents/e/DC-X010-2017.pdf
