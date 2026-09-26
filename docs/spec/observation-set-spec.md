@@ -42,7 +42,7 @@ Consumers MUST resolve semantics from explicit definitions and manifest referenc
 
 Development preferences and target-specific adjustment policy MUST remain outside the Observation namespace.
 
-## Observation Set identity
+## Observation Run and Set identity
 
 An Observation Run represents one execution over a Source Artifact under one declared analysis configuration.
 
@@ -223,7 +223,7 @@ Candidate measurements:
 
 These are not named `image_quality` because quality is interpretive.
 
-### Spatial evidence
+### Spatial representations
 
 Candidate evidence:
 
