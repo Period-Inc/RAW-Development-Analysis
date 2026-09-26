@@ -51,6 +51,7 @@ The validator MUST reproduce `fixtures/photo-observation-package-cases.yml`.
 - `RDA-POP-ASSET-MISSING` — an asset-valued Observation references an unknown asset.
 - `RDA-POP-PACKAGE-PATH-UNSAFE` — a package-local asset locator is absolute or traverses outside the package.
 - `RDA-POP-INVOCATION-OUTPUT-INCOHERENT` — an invocation explicitly declares an output reference that does not resolve to the matching output object.
+- `RDA-POP-INPUT-BINDING-INVALID` — a multi-input invocation omits, duplicates, or mislabels input roles required by its Analysis Procedure Definition.
 
 Message wording is non-normative.
 
@@ -71,6 +72,16 @@ The POP semantic closure MUST be sufficient to resolve the definitions required 
 The closure is validated as a resolved Definition Registry subset.
 
 A package that references a definition omitted from its closure is invalid even if the definition exists in the current repository Registry.
+
+## Input-role compatibility
+
+When an Analysis Procedure Definition declares more than one input role, a POP invocation MUST use role-qualified `input_bindings`.
+
+The set of bound roles MUST match the declared procedure input roles unless the procedure definition explicitly marks a role optional in a future compatible extension.
+
+A required role MUST NOT occur more than once unless the procedure definition explicitly declares a repeated/multi-valued role.
+
+This preserves directional and relational meaning for comparisons.
 
 ## Signal State compatibility
 
