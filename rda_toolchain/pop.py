@@ -321,6 +321,18 @@ def validate_pop(
                         f"unresolved package reference: {ref}",
                     )
                 )
+        for j, binding in enumerate(invocation.get("input_bindings") or []):
+            if not isinstance(binding, dict):
+                continue
+            ref = binding.get("ref")
+            if str(ref or "") not in object_index:
+                findings.append(
+                    Finding(
+                        "RDA-POP-REFERENCE-MISSING",
+                        f"procedure_invocations[{index}].input_bindings[{j}].ref",
+                        f"unresolved package reference: {ref}",
+                    )
+                )
         for j, ref in enumerate(invocation.get("output_observation_refs") or []):
             if str(ref or "") not in observations:
                 findings.append(
