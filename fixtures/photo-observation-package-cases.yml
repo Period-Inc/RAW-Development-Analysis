@@ -249,6 +249,74 @@ bases:
         locator: {type: package_path, value: objects/sha256/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee}
     coordinate_spaces: []
 
+  comparison:
+    rda_pop: "0.1"
+    package_profile: fixture/comparison
+    package_id: pop-fixture-comparison
+    sources:
+      - source_id: source-query
+        digests:
+          - {algorithm: sha256, value: "1111111111111111111111111111111111111111111111111111111111111111"}
+      - source_id: source-candidate
+        digests:
+          - {algorithm: sha256, value: "2222222222222222222222222222222222222222222222222222222222222222"}
+    semantic_closure:
+      registry_id: rda-fixture
+      registry_version: "0.1.0"
+      namespace: rda
+      status: provisional
+      definitions:
+        - id: rda.observation.fixture.directional-similarity
+          version: "0.1.0"
+          kind: observation
+          observation_kind: measurement
+          stability: provisional
+          title: Fixture Directional Similarity
+          description: Synthetic directional similarity observation for testing input roles.
+          value_contract:
+            type: number
+            unit: "1"
+          procedure_refs:
+            - {id: rda.procedure.fixture.compare-directional, version: "0.1.0"}
+        - id: rda.procedure.fixture.compare-directional
+          version: "0.1.0"
+          kind: procedure
+          stability: provisional
+          title: Fixture Directional Comparison
+          description: Synthetic comparison requiring explicit query and candidate roles.
+          inputs:
+            - {role: query}
+            - {role: candidate}
+          outputs:
+            - {id: rda.observation.fixture.directional-similarity, version: "0.1.0"}
+          parameters: []
+          determinism: deterministic
+    implementations:
+      - implementation_id: impl-comparison
+        name: fixture-comparator
+    runs:
+      - run_id: run-comparison
+        implementation_ref: impl-comparison
+        source_refs: [source-query, source-candidate]
+    procedure_invocations:
+      - invocation_id: invocation-comparison
+        run_ref: run-comparison
+        procedure_ref: {id: rda.procedure.fixture.compare-directional, version: "0.1.0"}
+        parameters: {}
+        input_bindings:
+          - {role: query, ref: source-query}
+          - {role: candidate, ref: source-candidate}
+        output_observation_refs: [observation-comparison]
+    signal_states: []
+    observations:
+      - observation_id: observation-comparison
+        definition_ref: {id: rda.observation.fixture.directional-similarity, version: "0.1.0"}
+        status: known
+        procedure_invocation_ref: invocation-comparison
+        value: 0.75
+    assets: []
+    coordinate_spaces: []
+
 cases:
   - id: valid-exact-rational-source-assertion
     from: source-rational
@@ -358,3 +426,25 @@ cases:
       set:
         - path: observations[0].value.asset_id
           value: asset-missing
+
+  - id: valid-role-qualified-comparison
+    from: comparison
+    expect: valid
+
+  - id: invalid-comparison-input-role
+    from: comparison
+    expect: invalid
+    findings: [RDA-POP-INPUT-BINDING-INVALID]
+    mutation:
+      set:
+        - path: procedure_invocations[0].input_bindings[1].role
+          value: reference
+
+  - id: invalid-comparison-input-reference
+    from: comparison
+    expect: invalid
+    findings: [RDA-POP-REFERENCE-MISSING]
+    mutation:
+      set:
+        - path: procedure_invocations[0].input_bindings[1].ref
+          value: source-missing
