@@ -305,13 +305,34 @@ def validate_pop(
             path=f"procedure_invocations[{index}].run_ref",
             findings=findings,
         )
-        _definition(
+        procedure_definition = _definition(
             definitions,
             invocation.get("procedure_ref"),
             path=f"procedure_invocations[{index}].procedure_ref",
             expected_kind="procedure",
             findings=findings,
         )
+
+        if procedure_definition is not None:
+            declared_roles = [
+                str(item.get("role") or "")
+                for item in procedure_definition.get("inputs") or []
+                if isinstance(item, dict) and item.get("role")
+            ]
+            bindings = [
+                item for item in invocation.get("input_bindings") or []
+                if isinstance(item, dict)
+            ]
+            if len(declared_roles) > 1:
+                bound_roles = [str(item.get("role") or "") for item in bindings]
+                if sorted(bound_roles) != sorted(declared_roles):
+                    findings.append(
+                        Finding(
+                            "RDA-POP-INPUT-BINDING-INVALID",
+                            f"procedure_invocations[{index}].input_bindings",
+                            f"declared input roles {declared_roles}, bound roles {bound_roles}",
+                        )
+                    )
         for j, ref in enumerate(invocation.get("input_refs") or []):
             if str(ref or "") not in object_index:
                 findings.append(
