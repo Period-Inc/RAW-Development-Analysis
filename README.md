@@ -121,3 +121,19 @@ See:
 
 - `docs/spec/comparison-retrieval-foundation-spec.md`
 - `docs/image-comparison-retrieval-foundation-plan.md`
+
+## Experimental RAW decoder probe
+
+Before stabilizing sensor-side measurement semantics, RDA can inspect the unpacked RAW state exposed by the current rawpy/LibRaw implementation without calling `postprocess()`.
+
+Install the optional experiment dependency and run:
+
+`pip install -e ".[raw]"`
+
+`rda probe-raw /path/to/file.raw`
+
+The resulting JSON records source digest, decoder version, visible sensor array shape/type, CFA/color-index metadata, black levels, white/saturation levels, and decoder-exposed dimensions.
+
+This output is experimental instrumentation. It is not yet a stable Observation Profile.
+
+See `docs/raw-decoder-characterization-plan.md`.
