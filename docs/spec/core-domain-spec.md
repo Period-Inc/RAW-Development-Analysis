@@ -177,7 +177,29 @@ An Derived Representation MUST declare:
 
 A Derived Representation is a transformed view of source information for inspection, measurement support, or downstream reasoning. It is not a substitute for the Source Artifact and does not by itself assert that an interpretation is true.
 
-### 3. Signal Domain
+### 3. Observation Definition
+
+An Observation Definition gives durable semantic identity to something that can appear in an Observation Set.
+
+It answers **what the observation means**, independently of which implementation produced it.
+
+An Observation Definition MUST declare or reference, as applicable:
+
+- stable definition ID and definition version;
+- observation kind: Source Assertion, Measurement, or Derived Representation role;
+- semantic description;
+- expected value shape/type;
+- unit or dimension when applicable;
+- spatial-scope semantics when applicable;
+- compatible or required Signal Domains;
+- validity/unknown-state semantics;
+- parameters that change the meaning rather than merely the implementation.
+
+A definition ID MUST NOT be reused for materially different semantics.
+
+Different Analysis Procedures MAY implement the same Observation Definition when they satisfy its semantic contract. If two procedures measure materially different concepts, they MUST use different Observation Definitions even if their human-readable labels are similar.
+
+### 4. Signal Domain
 
 A Signal Domain specifies the signal/image representation state in which a value has meaning.
 
@@ -206,7 +228,7 @@ A domain definition SHOULD specify, as applicable:
 - bit depth / numeric range;
 - clipping behavior.
 
-### 4. Analysis Procedure
+### 5. Analysis Procedure
 
 An Analysis Procedure defines the semantic method used to produce a Source Assertion, Measurement, or Derived Representation.
 
@@ -222,7 +244,7 @@ A procedure definition MUST identify:
 
 Two outputs with the same field name but produced by materially different procedures are not assumed equivalent.
 
-### 5. Procedure Implementation and Execution
+### 6. Procedure Implementation and Execution
 
 A **Procedure Implementation** is an executable realization of an Analysis Procedure. Multiple implementations MAY conform to the same procedure definition.
 
@@ -238,7 +260,7 @@ An **Observation Run** records the execution provenance required to explain an a
 
 Reproducibility claims MUST state whether they mean semantic equivalence, tolerance-bounded numeric equivalence, or byte-identical output.
 
-### 6. Development Context
+### 7. Development Context
 
 Development Context is typed information intentionally supplied to guide interpretation or decision.
 
@@ -257,7 +279,7 @@ Context MUST NOT become an untyped miscellaneous property bag. Persistent contex
 
 A baseline containing target-specific controls MUST reference the Target Model / process semantics under which those controls are meaningful.
 
-### 7. Interpretation
+### 8. Interpretation
 
 Interpretation assigns meaning to observations under a context.
 
@@ -281,7 +303,7 @@ Interpretation SHOULD record:
 
 Interpretive labels MUST NOT be inserted into the Observation Set as if they were measurements.
 
-### 8. Development Decision
+### 9. Development Decision
 
 A Development Decision is an explicit choice of development action based on an Observation Set, optional Interpretation, and Development Context.
 
@@ -296,7 +318,7 @@ A decision MAY contain:
 
 A baseline-plus-delta decision is valid, but the baseline identity MUST be explicit.
 
-### 9. Target Model
+### 10. Target Model
 
 A Target Model describes the capabilities and parameter semantics of a concrete development system.
 
@@ -309,7 +331,7 @@ Examples:
 
 The Target Model is an adapter-side concept. It MUST NOT redefine Observation semantics.
 
-### 10. Target Encoding
+### 11. Target Encoding
 
 A Target Encoding is the serialized artifact that applies or communicates a Development Decision to a Target Model.
 
@@ -322,7 +344,7 @@ Examples:
 
 Target Encoding is derived and replaceable. It is never the canonical meaning of the Development Decision.
 
-### 11. Rendered Result
+### 12. Rendered Result
 
 A Rendered Result is a materialized visual or numeric output produced by applying a Development Decision, directly or through a Target Encoding, using a declared Target Model or renderer.
 
@@ -337,7 +359,7 @@ A Rendered Result SHOULD retain enough provenance to identify:
 
 Rendered Results are derived artifacts. They do not overwrite Source Artifacts or Observations.
 
-### 12. Evaluation Record
+### 13. Evaluation Record
 
 An Evaluation Record compares an observation, interpretation, decision, encoding, or rendered result against a reference or criterion.
 
