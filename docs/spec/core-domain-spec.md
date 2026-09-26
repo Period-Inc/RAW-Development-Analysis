@@ -143,7 +143,7 @@ A Measurement MUST define or reference:
 - measurement definition identity;
 - value;
 - unit or dimension;
-- measurement domain;
+- signal domain;
 - analysis procedure;
 - input representation;
 - spatial scope when not global;
@@ -191,7 +191,7 @@ An Observation Definition MUST declare or reference, as applicable:
 - expected value shape/type;
 - unit or dimension when applicable;
 - spatial-scope semantics when applicable;
-- compatible or required Signal Domains;
+- compatible or required Signal Domain Definitions;
 - validity/unknown-state semantics;
 - parameters that change the meaning rather than merely the implementation.
 
@@ -199,9 +199,9 @@ A definition ID MUST NOT be reused for materially different semantics.
 
 Different Analysis Procedures MAY implement the same Observation Definition when they satisfy its semantic contract. If two procedures measure materially different concepts, they MUST use different Observation Definitions even if their human-readable labels are similar.
 
-### 4. Signal Domain
+### 4. Signal Domain Definition
 
-A Signal Domain specifies the signal/image representation state in which a value has meaning.
+A Signal Domain Definition specifies a class of signal/image representation states in which values can have a common mathematical and imaging interpretation.
 
 It MUST be explicit whenever the same numeric value could have different meanings under different processing stages.
 
@@ -228,7 +228,32 @@ A domain definition SHOULD specify, as applicable:
 - bit depth / numeric range;
 - clipping behavior.
 
-### 5. Analysis Procedure
+### 5. Signal State
+
+A Signal State is a concrete instance of a Signal Domain Definition for a particular source/derivation path.
+
+It binds the domain semantics to the source-specific or run-specific parameters required to interpret actual values.
+
+Depending on the domain, a Signal State MAY identify:
+
+- Source Artifact / source-plane identity;
+- active area and channel/CFA layout;
+- black-level values or functions;
+- white/saturation levels;
+- normalization parameters;
+- demosaic state and procedure;
+- white-balance coefficients and whether they have been applied;
+- color matrices, ICC/DCP/profile identities, or other color transforms;
+- transfer function;
+- numeric range / quantization;
+- crop, resize, orientation, or other material spatial transforms;
+- the procedure/run that created the state.
+
+A Measurement or Derived Representation whose numeric meaning depends on these details MUST reference the applicable Signal State, not merely a generic Signal Domain Definition.
+
+Two Signal States MAY conform to the same Signal Domain Definition while carrying different source-specific parameters.
+
+### 6. Analysis Procedure
 
 An Analysis Procedure defines the semantic method used to produce a Source Assertion, Measurement, or Derived Representation.
 
@@ -244,7 +269,7 @@ A procedure definition MUST identify:
 
 Two outputs with the same field name but produced by materially different procedures are not assumed equivalent.
 
-### 6. Procedure Implementation and Execution
+### 7. Procedure Implementation and Execution
 
 A **Procedure Implementation** is an executable realization of an Analysis Procedure. Multiple implementations MAY conform to the same procedure definition.
 
@@ -260,7 +285,7 @@ An **Observation Run** records the execution provenance required to explain an a
 
 Reproducibility claims MUST state whether they mean semantic equivalence, tolerance-bounded numeric equivalence, or byte-identical output.
 
-### 7. Development Context
+### 8. Development Context
 
 Development Context is typed information intentionally supplied to guide interpretation or decision.
 
@@ -279,7 +304,7 @@ Context MUST NOT become an untyped miscellaneous property bag. Persistent contex
 
 A baseline containing target-specific controls MUST reference the Target Model / process semantics under which those controls are meaningful.
 
-### 8. Interpretation
+### 9. Interpretation
 
 Interpretation assigns meaning to observations under a context.
 
@@ -305,7 +330,7 @@ Interpretation SHOULD record:
 
 Interpretive labels MUST NOT be inserted into the Observation Set as if they were measurements.
 
-### 9. Development Decision
+### 10. Development Decision
 
 A Development Decision is an explicit choice of development action based on an Observation Set, optional Interpretation, and Development Context.
 
@@ -322,7 +347,7 @@ A baseline-plus-delta decision is valid, but the baseline identity MUST be expli
 
 A machine-produced decision SHOULD identify the reasoning/decision procedure and the effective input view used to produce it. Referencing a complete Observation Set is insufficient when the actor actually received only a filtered or transformed subset.
 
-### 10. Target Model
+### 11. Target Model
 
 A Target Model describes the capabilities and parameter semantics of a concrete development system.
 
@@ -335,7 +360,7 @@ Examples:
 
 The Target Model is an adapter-side concept. It MUST NOT redefine Observation semantics.
 
-### 11. Target Encoding
+### 12. Target Encoding
 
 A Target Encoding is the serialized artifact that applies or communicates a Development Decision to a Target Model.
 
@@ -348,7 +373,7 @@ Examples:
 
 Target Encoding is derived and replaceable. It is never the canonical meaning of the Development Decision.
 
-### 12. Rendered Result
+### 13. Rendered Result
 
 A Rendered Result is a materialized visual or numeric output produced by applying a Development Decision, directly or through a Target Encoding, using a declared Target Model or renderer.
 
@@ -363,7 +388,7 @@ A Rendered Result SHOULD retain enough provenance to identify:
 
 Rendered Results are derived artifacts. They do not overwrite Source Artifacts or Observations.
 
-### 13. Evaluation Record
+### 14. Evaluation Record
 
 An Evaluation Record compares an observation, interpretation, decision, encoding, or rendered result against a reference or criterion.
 
