@@ -77,7 +77,7 @@ This separation allows each layer to evolve independently:
 - more explicit data structures and provenance;
 - some values must be duplicated as references across stage boundaries;
 - MVP code may appear more complex than a single script;
-- a neutral Development Intent layer cannot pretend that all vendor controls have equivalent semantics.
+- target-neutral intent abstractions cannot pretend that all vendor controls have equivalent semantics.
 
 These costs are accepted because long-term interpretability is a primary project requirement.
 
