@@ -20,7 +20,11 @@ This document defines the stable semantic domain of RAW Development Analysis.
 
 The core exists to describe how photographic source data becomes durable observations and derived information that can support comparison, indexing, retrieval, interpretation, development decisions, and other downstream uses without making any current RAW decoder, AI model, search engine, development application, or metadata format part of the permanent meaning of the system.
 
-The design target is decades. Implementations are expected to change substantially while these semantic boundaries remain useful.
+The preservation horizon is 1,000 years.
+
+This is not a claim that any current implementation, repository host, file format, organization, storage medium, or execution environment will remain available for that period.
+
+The requirement is semantic continuity: future implementations MUST be able to recover the intended meaning, provenance, uncertainty, and transformation history of preserved records even after multiple generations of software replacement.
 
 ## Scope
 
@@ -74,6 +78,9 @@ Evaluation may compare any resulting decision or rendered result with a referenc
 8. **AI is an actor, not an authority built into the domain.** Human, rules engine, statistical model, or future reasoning system MAY perform interpretation or decision roles under the same contracts.
 9. **Vendor parameters are not universal intent.** Tool-specific slider values belong to Target Encoding or a target-specific decision extension.
 10. **Historical results remain interpretable.** Stored records MUST carry enough version and provenance information to explain what produced them even when the producing software no longer exists.
+11. **Meaning must survive implementation extinction.** No durable Core meaning may depend solely on a current executable, hosted service, source repository, vendor API, or undocumented implementation behavior.
+12. **Ambiguity is preserved, not silently resolved.** When evidence is incomplete or competing interpretations remain possible, preserved records SHOULD retain that uncertainty rather than normalize it into a single convenient answer.
+13. **Migration must be possible without semantic reinvention.** A future representation MAY replace every current storage/serialization mechanism, provided the original semantic distinctions, provenance, and uncertainty can be preserved or explicitly declared lost.
 
 ## Aggregate model
 
