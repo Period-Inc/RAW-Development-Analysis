@@ -45,9 +45,9 @@ The project therefore versions definitions, procedures, schemas, and adapters in
 The system distinguishes five versioned layers:
 
 1. **Core semantic model** — Source, Observation, Context, Interpretation, Decision, Target Model, Target Encoding, Evaluation.
-2. **Definition registry** — stable identities for measurements, domains, procedures, intent types, and target semantics.
+2. **Definition registry** — stable identities for observations, signal/measurement domains, procedures, target-neutral decision semantics when justified, and target semantics.
 3. **Serialization schemas** — JSON/package/wire representations.
-4. **Implementations** — analyzers, decoders, AI actors, renderers, adapters.
+4. **Implementations and executions** — analyzers, decoders, AI actors, renderers, adapters, immutable build identities, and the runs that used them.
 5. **Experimental profiles** — temporary combinations used for evaluation.
 
 A change in one layer MUST NOT imply a version change in all other layers.
@@ -75,6 +75,8 @@ Schemas and registries SHOULD use semantic versioning.
 - **Major** — a breaking change to interpretation or required structure.
 
 Implementation versions MAY follow their own release policy, but provenance MUST retain the exact version or immutable build identity used to produce stored derived data.
+
+Procedure identity and implementation identity MUST remain separate: a procedure defines the method semantics; an implementation is one executable realization of that procedure; a run records one execution of an implementation.
 
 ## Observation compatibility
 
@@ -125,6 +127,14 @@ Examples of extension ownership include:
 - a future subject-detection module.
 
 Promotion of an extension into Core requires a semantic review. Existing extension data remains valid under its original identity.
+
+## Provenance interoperability
+
+The project SHOULD define mappings to established provenance systems where they preserve RDA semantics.
+
+In particular, Source/Observation/Rendered artifacts are conceptually entity-like, while Observation Runs, conversions, and rendering executions are activity-like. Interoperability mappings MUST remain adapters/profiles so that RDA does not inherit unrelated trust, signing, or serialization requirements.
+
+Media provenance systems MAY additionally carry RDA artifacts, assertions, lineage, and hashes. RDA MUST NOT assume that provenance presence proves photographic truth or aesthetic correctness.
 
 ## Source identity and content addressing
 
