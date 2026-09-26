@@ -222,6 +222,8 @@ Changing a baseline creates a new baseline identity or revision.
 
 A baseline-relative delta MUST identify the exact baseline revision against which the delta is expressed.
 
+If the baseline contains target-specific controls, its identity MUST also resolve the Target Model / process semantics required to interpret those controls. A numerically identical baseline under materially different target semantics is not assumed equivalent.
+
 ## Deprecation
 
 Core definitions SHOULD be deprecated before removal.
