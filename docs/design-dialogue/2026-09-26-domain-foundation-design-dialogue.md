@@ -40,7 +40,7 @@ This is useful operationally but insufficient as the top-level abstraction becau
 
 ### Domain-first design
 
-The preferred approach defines Source Artifact, Observation Run, Observation Set, Signal Domain, Analysis Procedure, Procedure Implementation, Development Context, Interpretation, Development Decision, Target Model, Target Encoding, Rendered Result, and Evaluation Record first.
+The preferred approach defines Source Artifact, Observation Run, Observation Set, Observation Definition, Signal Domain, Analysis Procedure, Procedure Implementation, Development Context, Interpretation, Development Decision, Target Model, Target Encoding, Rendered Result, and Evaluation Record first.
 
 A package then becomes one serialization of an Observation Set.
 
