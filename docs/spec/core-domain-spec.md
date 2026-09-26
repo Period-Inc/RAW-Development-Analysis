@@ -240,19 +240,22 @@ Reproducibility claims MUST state whether they mean semantic equivalence, tolera
 
 ### 6. Development Context
 
-Development Context is information intentionally supplied to guide interpretation or decision.
+Development Context is typed information intentionally supplied to guide interpretation or decision.
 
 Examples:
 
-- baseline development profile such as `_Fundamental`;
-- desired rendering style;
-- destination medium;
-- output color space;
+- a versioned baseline development profile such as `_Fundamental`;
+- a rendering objective or style reference;
+- destination medium or output color space;
 - photographer-specific preferences;
-- constraints such as "do not alter crop";
-- target application capabilities.
+- explicit constraints such as "do not alter crop";
+- a reference to target capabilities.
 
 Development Context is not evidence about the source.
+
+Context MUST NOT become an untyped miscellaneous property bag. Persistent context items SHOULD have a stable type and identity/revision when their later interpretation matters.
+
+A baseline containing target-specific controls MUST reference the Target Model / process semantics under which those controls are meaningful.
 
 ### 7. Interpretation
 
