@@ -101,6 +101,8 @@ An AI input projection MAY additionally compute a floating-point approximation, 
 
 Manifest object IDs are references, not human labels.
 
+POP v0.1 uses one package-wide object-ID scope across Source Artifacts, Implementations, Runs, Procedure Invocations, Signal States, Observations, Assets, and Coordinate Spaces. Reusing the same object ID for two different manifest objects is invalid.
+
 An implementation MAY use UUID URNs, content-addressed IDs, or package-local opaque identifiers.
 
 The package MUST define reference scope unambiguously.
@@ -144,6 +146,7 @@ It SHOULD include:
 
 - Registry identity;
 - Registry release version;
+- Registry namespace and status;
 - Registry bundle digest when available;
 - exact referenced Definition ID/version records.
 
