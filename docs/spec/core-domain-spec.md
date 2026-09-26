@@ -9,7 +9,9 @@ created_at: "2026-09-26"
 updated_at: "2026-09-26"
 owners:
   - "Period-Inc"
-relations: []
+relations:
+  - type: "depends_on"
+    target: "rda-foundational-axioms"
 ---
 
 # RAW Development Analysis Core Domain
@@ -17,6 +19,8 @@ relations: []
 ## Purpose
 
 This document defines the stable semantic domain of RAW Development Analysis.
+
+It is subordinate to `rda-foundational-axioms`. The Core may evolve, but it MUST NOT contradict the Foundational Axioms.
 
 The core exists to describe how photographic source data becomes durable observations and derived information that can support comparison, indexing, retrieval, interpretation, development decisions, and other downstream uses without making any current RAW decoder, AI model, search engine, development application, or metadata format part of the permanent meaning of the system.
 
