@@ -1,0 +1,13 @@
+rda_registry: "0.1"
+registry_id: rda-definitions
+registry_version: "0.1.0"
+namespace: rda
+status: provisional
+
+# Intentionally empty.
+#
+# The registry structure is now defined, but RAW-development observations such as
+# luminance percentiles, clipping, highlight headroom, noise, and diagnostic
+# preview transforms are not registered until their semantics are specified and
+# validated. Fixtures use synthetic definitions to validate the registry rules.
+definitions: []
