@@ -36,3 +36,25 @@ The design target is measured in decades. The core therefore prefers semantic in
 Normative project documentation follows the Period Project Documentation Model (PDM). Canonical documentation is English unless explicitly stated otherwise.
 
 Initial domain work is being developed under `docs/`.
+
+## Current conformance surface
+
+The repository now contains executable contracts for:
+
+- the semantic Definition Registry;
+- Photo Observation Package (POP) manifests;
+- valid/invalid conformance fixtures for both layers.
+
+Local validation commands:
+
+```text
+python -m pip install -e ".[dev]"
+pytest
+rda validate-registry
+rda test-registry-fixtures
+rda test-pop-fixtures
+```
+
+RAW measurements such as luminance percentiles, clipping/headroom, noise, and diagnostic transforms remain deliberately provisional until the base observation profile experiments define and verify their semantics.
+
+See `docs/base-observation-profile-plan.md` for the next phase.
