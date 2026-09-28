@@ -128,3 +128,24 @@ This makes it suitable for finding bad assumptions early.
 - LRCAT record matching: pending.
 - Development decision extraction: pending.
 - RAW decoder characterization: pending.
+
+## Batch LRCAT extraction
+
+After the fixture files are placed in the local workspace, the catalog-matched fixtures can be traced in one command:
+
+`rda trace-lrcat-fixtures experiments/001-raw-jpeg-development-trace/fixtures.yml --workspace /Users/agent/Documents/Temporary/RAW-Development-Analysis --out /Users/agent/Documents/Temporary/RAW-Development-Analysis/extracted/experiment-001`
+
+The command:
+
+- verifies catalog, RAW, and JPEG SHA-256 values before analysis;
+- resolves the already-verified `AgLibraryFile.id_local` rather than trusting basename as identity;
+- verifies the expected basename as a guardrail;
+- follows File -> Image -> current Develop Settings -> Develop History;
+- decodes the tested Lightroom Classic history BLOB form;
+- identifies the last `_Fundamental` history state;
+- identifies the last export history state using the tested catalog's localized event name;
+- extracts selected scalar development settings without pretending to fully parse Lightroom's internal payload language;
+- computes baseline-relative deltas only for unambiguous scalar values;
+- writes one JSON trace per fixture plus `summary.json`.
+
+This is an experimental Lightroom catalog adapter. Lightroom table names, history BLOB encoding, and localized history labels are implementation observations, not Core RDA semantics.
