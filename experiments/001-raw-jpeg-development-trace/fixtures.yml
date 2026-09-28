@@ -7,17 +7,16 @@ catalogs:
   - catalog_id: grill-steak-familia
     file: _20260918_GRILL STEAK FAMILIA.lrcat
     sha256: 96084929732a30a9f548fe9543bc49d2b82cdfafeec0c24ad583193c8e0a4599
-    association_status: inferred
-    fixture_pairs:
-      - food-IMGL9516
-      - food-IMGL9449
-      - food-IMGL9552
-      - food-IMGL9596
+    association_status: no_fixture_match_found
+    fixture_pairs: []
+    notes:
+      - None of the four food RAW basenames were found in AgLibraryFile during the cross-catalog lookup.
+      - This catalog contains a distinct IMGL0332.CR2 row (AgLibraryFile.id_local 6521), demonstrating that basename alone is not a globally unique Source Artifact identity.
 
   - catalog_id: acoustic-anga-sign-language
     file: "_20260923_Acoustic ANGA feat.手話.lrcat"
     sha256: 318757a41ceebe5119f9aba29e30e06a1d9c570231a50026cf6ee223ae135694
-    association_status: inferred
+    association_status: basename_records_confirmed
     fixture_pairs:
       - acoustic-IMGL0332
       - acoustic-IMGL0400
@@ -28,7 +27,7 @@ catalogs:
   - catalog_id: bni-omoiyari-handover
     file: "_20260925_BNI-OMOIYARI_引継式.lrcat"
     sha256: 106507e3328b0bd8b19b4eeb62d388926e547a09694df57c33d2299992a65666
-    association_status: inferred
+    association_status: basename_records_confirmed
     fixture_pairs:
       - bni-IMGL0771
       - bni-IMGL0776
@@ -47,7 +46,7 @@ pairs:
       dimensions: [6720, 4480]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: raw_jpeg_basename_match_catalog_record_not_found
 
   - pair_id: food-IMGL9449
     raw:
@@ -60,7 +59,7 @@ pairs:
       dimensions: [6720, 4480]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: raw_jpeg_basename_match_catalog_record_not_found
 
   - pair_id: food-IMGL9552
     raw:
@@ -73,7 +72,7 @@ pairs:
       dimensions: [6571, 4381]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: raw_jpeg_basename_match_catalog_record_not_found
     notes:
       - JPEG dimensions indicate a crop or another spatial transform relative to a full 6720x4480 render.
 
@@ -88,7 +87,7 @@ pairs:
       dimensions: [6720, 4480]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: raw_jpeg_basename_match_catalog_record_not_found
 
   - pair_id: acoustic-IMGL0332
     raw:
@@ -101,7 +100,9 @@ pairs:
       dimensions: [4480, 6720]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 2239
     notes:
       - Portrait-oriented rendered result.
 
@@ -116,7 +117,9 @@ pairs:
       dimensions: [6237, 4158]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 5476
     notes:
       - JPEG dimensions indicate a crop or another spatial transform.
 
@@ -131,7 +134,9 @@ pairs:
       dimensions: [4480, 6720]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 12029
     notes:
       - Portrait-oriented rendered result.
 
@@ -146,7 +151,9 @@ pairs:
       dimensions: [6720, 4480]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 16077
 
   - pair_id: acoustic-IMGM7105
     raw:
@@ -159,7 +166,9 @@ pairs:
       dimensions: [6480, 4320]
       rendered_exif_camera: Canon EOS 5DS
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 10671
 
   - pair_id: bni-IMGL0771
     raw:
@@ -172,7 +181,9 @@ pairs:
       dimensions: [6720, 4480]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 685
 
   - pair_id: bni-IMGL0776
     raw:
@@ -185,7 +196,9 @@ pairs:
       dimensions: [6720, 4480]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 801
 
   - pair_id: bni-IMGL0786
     raw:
@@ -198,7 +211,9 @@ pairs:
       dimensions: [6720, 4480]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 1021
 
   - pair_id: bni-IMGM7197
     raw:
@@ -211,7 +226,9 @@ pairs:
       dimensions: [6034, 4023]
       rendered_exif_camera: Canon EOS 5DS
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: basename_match_pending_catalog_verification
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 5113
     notes:
       - JPEG dimensions indicate a crop or another spatial transform.
 
