@@ -123,6 +123,8 @@ This makes it suitable for finding bad assumptions early.
 - RAW/JPEG file identity: captured by SHA-256.
 - Pairing by basename/export name: strong candidate, not yet catalog-verified.
 - LRCAT availability: confirmed for three catalog files.
+- LRCAT SQLite readability: confirmed with immutable read-only access for all three fixture catalogs.
+- Copied fixture directory contains no LRCAT WAL/SHM sidecars.
 - LRCAT record matching: pending.
 - Development decision extraction: pending.
 - RAW decoder characterization: pending.
