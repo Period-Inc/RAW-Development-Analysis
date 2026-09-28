@@ -90,3 +90,55 @@ This would allow RDA to distinguish:
 - historical human editing steps.
 
 The history table is particularly important because it may allow the research dataset to preserve the sequence of human development decisions rather than only the final state.
+
+
+## Verified relation trace: IMGL0400
+
+Fixture `acoustic-IMGL0400` verified the candidate joins with real data:
+
+- `AgLibraryFile.id_local = 5476`
+- `Adobe_images.rootFile = 5476`
+- `Adobe_images.id_local = 819`
+- `Adobe_images.developSettingsIDCache = 5509`
+- `Adobe_imageDevelopSettings.id_local = 5509`
+- `Adobe_imageDevelopSettings.image = 819`
+- `Adobe_libraryImageDevelopHistoryStep.image = 819`
+
+Therefore, for this Lightroom Classic 15.5.1 fixture, the working relation is:
+
+```text
+AgLibraryFile.id_local
+  <- Adobe_images.rootFile
+Adobe_images.id_local
+  <- Adobe_imageDevelopSettings.image
+Adobe_images.developSettingsIDCache
+  -> Adobe_imageDevelopSettings.id_local
+Adobe_images.id_local
+  <- Adobe_libraryImageDevelopHistoryStep.image
+```
+
+### Development state findings
+
+For `IMGL0400.CR2`:
+
+- RAW dimensions: 6720 x 4480.
+- current develop row process version: 15.4.
+- white balance mode: `Custom`.
+- developed crop dimensions: 6237 x 4158.
+- the exported JPEG fixture is also 6237 x 4158, providing strong evidence that this develop state corresponds spatially to the exported result.
+- current settings text length: 3201 bytes/characters as reported by SQLite `length()`.
+- the serialized current settings include `AutoLateralCA = 1`, `Blacks2012 = 0`, `CameraProfile = "Adobe Standard"`, `ColorNoiseReduction = 10`, `ColorNoiseReductionSmoothness = 90`, and `Contrast2012 = 0`.
+
+### Human history findings
+
+The develop history for the same image includes, in order:
+
+1. import;
+2. preset `_Fundamental`;
+3. synchronized settings;
+4. synchronized settings;
+5. export to disk.
+
+This is strong evidence that Experiment 001 can recover not only a final human development state but also the sequence of Lightroom history events that produced it.
+
+The serialized history-step payloads still need to be extracted in full before individual decision deltas are interpreted.
