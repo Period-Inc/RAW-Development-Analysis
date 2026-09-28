@@ -3,10 +3,12 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import sqlite3
 import sys
 
 import yaml
 
+from .lrcat import trace_fixture_manifest
 from .pop import load_pop, validate_pop, validate_pop_fixture_contract
 from .raw_probe import probe_raw
 from .registry import ROOT, load_registry, validate_fixture_contract, validate_registry
@@ -38,6 +40,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Experimentally inspect decoder-exposed unpacked RAW sensor state",
     )
     probe_raw_cmd.add_argument("path")
+
+    lrcat_fixtures = sub.add_parser(
+        "trace-lrcat-fixtures",
+        help="Experimentally trace Lightroom catalog state for a fixture manifest",
+    )
+    lrcat_fixtures.add_argument("path")
+    lrcat_fixtures.add_argument("--workspace", required=True)
+    lrcat_fixtures.add_argument("--out", required=True)
 
     pop_fixtures = sub.add_parser("test-pop-fixtures", help="Run POP conformance fixtures")
     pop_fixtures.add_argument(
@@ -71,6 +81,19 @@ def main(argv: list[str] | None = None) -> int:
             _print_json({"result": "unavailable", "error": str(exc)})
             return 2
         return 0
+
+    if args.command == "trace-lrcat-fixtures":
+        try:
+            result = trace_fixture_manifest(
+                pathlib.Path(args.path),
+                workspace=pathlib.Path(args.workspace),
+                output_dir=pathlib.Path(args.out),
+            )
+            _print_json(result)
+            return 0
+        except (FileNotFoundError, ValueError, sqlite3.Error) as exc:
+            _print_json({"result": "invalid", "error": str(exc)})
+            return 1
 
     if args.command == "test-pop-fixtures":
         document = yaml.safe_load(pathlib.Path(args.path).read_text(encoding="utf-8")) or {}
