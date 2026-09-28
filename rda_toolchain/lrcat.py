@@ -35,7 +35,7 @@ SELECTED_DEVELOP_KEYS = (
 )
 
 _SETTING_LINE = re.compile(
-    r'^\\s*([A-Za-z][A-Za-z0-9_]*)\\s*=\\s*(.+?),?\\s*$'
+    r'^\s*([A-Za-z][A-Za-z0-9_]*)\s*=\s*(.+?),?\s*$'
 )
 
 
