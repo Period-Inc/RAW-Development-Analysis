@@ -1,0 +1,450 @@
+rda_pop_fixture: "0.1"
+fixture_version: "0.1.0"
+
+bases:
+  source-rational:
+    rda_pop: "0.1"
+    package_profile: fixture/source-rational
+    package_id: pop-fixture-source-rational
+    sources:
+      - source_id: source-1
+        digests:
+          - {algorithm: sha256, value: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+        media_type: image/x-fixture-raw
+        byte_length: 100
+    semantic_closure:
+      registry_id: rda-fixture
+      registry_version: "0.1.0"
+      namespace: rda
+      status: provisional
+      definitions:
+        - id: rda.observation.fixture.rational
+          version: "0.1.0"
+          kind: observation
+          observation_kind: source_assertion
+          stability: provisional
+          title: Fixture Rational Assertion
+          description: Synthetic exact rational source assertion.
+          value_contract:
+            type: rational
+            unit: s
+          procedure_refs:
+            - {id: rda.procedure.fixture.read-rational, version: "0.1.0"}
+        - id: rda.procedure.fixture.read-rational
+          version: "0.1.0"
+          kind: procedure
+          stability: provisional
+          title: Fixture Rational Reader
+          description: Synthetic source assertion reader.
+          inputs:
+            - {role: source_artifact_metadata}
+          outputs:
+            - {id: rda.observation.fixture.rational, version: "0.1.0"}
+          parameters: []
+          determinism: deterministic
+    implementations:
+      - implementation_id: impl-1
+        name: fixture-analyzer
+        version: "0.1.0"
+    runs:
+      - run_id: run-1
+        implementation_ref: impl-1
+        source_refs: [source-1]
+    procedure_invocations:
+      - invocation_id: invocation-1
+        run_ref: run-1
+        procedure_ref: {id: rda.procedure.fixture.read-rational, version: "0.1.0"}
+        parameters: {}
+        input_refs: [source-1]
+        output_observation_refs: [observation-1]
+    signal_states: []
+    observations:
+      - observation_id: observation-1
+        definition_ref: {id: rda.observation.fixture.rational, version: "0.1.0"}
+        status: known
+        procedure_invocation_ref: invocation-1
+        value:
+          kind: rational
+          numerator: 1
+          denominator: 125
+        source_locator:
+          namespace: fixture
+          field: ExposureTime
+    assets:
+      - asset_id: asset-safe
+        digests:
+          - {algorithm: sha256, value: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}
+        media_type: image/webp
+        byte_length: 10
+        lossy: true
+        locator:
+          type: package_path
+          value: objects/sha256/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    coordinate_spaces: []
+
+  measurement:
+    rda_pop: "0.1"
+    package_profile: fixture/measurement
+    package_id: pop-fixture-measurement
+    sources:
+      - source_id: source-m
+        digests:
+          - {algorithm: sha256, value: "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}
+    semantic_closure:
+      registry_id: rda-fixture
+      registry_version: "0.1.0"
+      namespace: rda
+      status: provisional
+      definitions:
+        - id: rda.signal-domain.fixture.linear-a
+          version: "0.1.0"
+          kind: signal_domain
+          stability: provisional
+          title: Fixture Linear A
+          description: Synthetic signal domain A.
+          state_contract:
+            required_properties: [numeric_range]
+        - id: rda.signal-domain.fixture.linear-b
+          version: "0.1.0"
+          kind: signal_domain
+          stability: provisional
+          title: Fixture Linear B
+          description: Synthetic signal domain B.
+          state_contract:
+            required_properties: [numeric_range]
+        - id: rda.observation.fixture.measurement
+          version: "0.1.0"
+          kind: observation
+          observation_kind: measurement
+          stability: provisional
+          title: Fixture Measurement
+          description: Synthetic scalar measurement.
+          value_contract:
+            type: number
+            unit: "1"
+          signal_domain_refs:
+            - {id: rda.signal-domain.fixture.linear-a, version: "0.1.0"}
+          procedure_refs:
+            - {id: rda.procedure.fixture.measure, version: "0.1.0"}
+        - id: rda.procedure.fixture.measure
+          version: "0.1.0"
+          kind: procedure
+          stability: provisional
+          title: Fixture Measure
+          description: Synthetic measurement procedure.
+          inputs:
+            - role: input
+              signal_domain: {id: rda.signal-domain.fixture.linear-a, version: "0.1.0"}
+          outputs:
+            - {id: rda.observation.fixture.measurement, version: "0.1.0"}
+          parameters: []
+          determinism: deterministic
+        - id: rda.procedure.fixture.alternate-measure
+          version: "0.1.0"
+          kind: procedure
+          stability: provisional
+          title: Fixture Alternate Measure
+          description: Alternate valid procedure not allowed by the observation definition.
+          inputs:
+            - role: input
+              signal_domain: {id: rda.signal-domain.fixture.linear-a, version: "0.1.0"}
+          outputs:
+            - {id: rda.observation.fixture.measurement, version: "0.1.0"}
+          parameters: []
+          determinism: deterministic
+    implementations:
+      - implementation_id: impl-m
+        name: fixture-analyzer
+    runs:
+      - run_id: run-m
+        implementation_ref: impl-m
+        source_refs: [source-m]
+    procedure_invocations:
+      - invocation_id: invocation-m
+        run_ref: run-m
+        procedure_ref: {id: rda.procedure.fixture.measure, version: "0.1.0"}
+        parameters: {}
+        input_refs: [source-m]
+        output_observation_refs: [observation-m]
+    signal_states:
+      - signal_state_id: state-m
+        domain_ref: {id: rda.signal-domain.fixture.linear-a, version: "0.1.0"}
+        source_ref: source-m
+        properties:
+          numeric_range: [0, 1]
+    observations:
+      - observation_id: observation-m
+        definition_ref: {id: rda.observation.fixture.measurement, version: "0.1.0"}
+        status: known
+        procedure_invocation_ref: invocation-m
+        signal_state_ref: state-m
+        value: 0.5
+    assets: []
+    coordinate_spaces: []
+
+  derived-asset:
+    rda_pop: "0.1"
+    package_profile: fixture/derived-asset
+    package_id: pop-fixture-derived
+    sources:
+      - source_id: source-d
+        digests:
+          - {algorithm: sha256, value: "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}
+    semantic_closure:
+      registry_id: rda-fixture
+      registry_version: "0.1.0"
+      namespace: rda
+      status: provisional
+      definitions:
+        - id: rda.observation.fixture.preview
+          version: "0.1.0"
+          kind: observation
+          observation_kind: derived_representation
+          stability: provisional
+          title: Fixture Preview
+          description: Synthetic image representation.
+          value_contract:
+            type: image
+          procedure_refs:
+            - {id: rda.procedure.fixture.preview, version: "0.1.0"}
+        - id: rda.procedure.fixture.preview
+          version: "0.1.0"
+          kind: procedure
+          stability: provisional
+          title: Fixture Preview Procedure
+          description: Synthetic preview procedure.
+          inputs:
+            - {role: source}
+          outputs:
+            - {id: rda.observation.fixture.preview, version: "0.1.0"}
+          parameters: []
+          determinism: deterministic
+    implementations:
+      - implementation_id: impl-d
+        name: fixture-analyzer
+    runs:
+      - run_id: run-d
+        implementation_ref: impl-d
+        source_refs: [source-d]
+    procedure_invocations:
+      - invocation_id: invocation-d
+        run_ref: run-d
+        procedure_ref: {id: rda.procedure.fixture.preview, version: "0.1.0"}
+        parameters: {}
+        output_observation_refs: [observation-d]
+    signal_states: []
+    observations:
+      - observation_id: observation-d
+        definition_ref: {id: rda.observation.fixture.preview, version: "0.1.0"}
+        status: known
+        procedure_invocation_ref: invocation-d
+        value: {kind: asset_ref, asset_id: asset-d}
+    assets:
+      - asset_id: asset-d
+        digests:
+          - {algorithm: sha256, value: "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}
+        media_type: image/webp
+        byte_length: 20
+        lossy: true
+        locator: {type: package_path, value: objects/sha256/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee}
+    coordinate_spaces: []
+
+  comparison:
+    rda_pop: "0.1"
+    package_profile: fixture/comparison
+    package_id: pop-fixture-comparison
+    sources:
+      - source_id: source-query
+        digests:
+          - {algorithm: sha256, value: "1111111111111111111111111111111111111111111111111111111111111111"}
+      - source_id: source-candidate
+        digests:
+          - {algorithm: sha256, value: "2222222222222222222222222222222222222222222222222222222222222222"}
+    semantic_closure:
+      registry_id: rda-fixture
+      registry_version: "0.1.0"
+      namespace: rda
+      status: provisional
+      definitions:
+        - id: rda.observation.fixture.directional-similarity
+          version: "0.1.0"
+          kind: observation
+          observation_kind: measurement
+          stability: provisional
+          title: Fixture Directional Similarity
+          description: Synthetic directional similarity observation for testing input roles.
+          value_contract:
+            type: number
+            unit: "1"
+          procedure_refs:
+            - {id: rda.procedure.fixture.compare-directional, version: "0.1.0"}
+        - id: rda.procedure.fixture.compare-directional
+          version: "0.1.0"
+          kind: procedure
+          stability: provisional
+          title: Fixture Directional Comparison
+          description: Synthetic comparison requiring explicit query and candidate roles.
+          inputs:
+            - {role: query}
+            - {role: candidate}
+          outputs:
+            - {id: rda.observation.fixture.directional-similarity, version: "0.1.0"}
+          parameters: []
+          determinism: deterministic
+    implementations:
+      - implementation_id: impl-comparison
+        name: fixture-comparator
+    runs:
+      - run_id: run-comparison
+        implementation_ref: impl-comparison
+        source_refs: [source-query, source-candidate]
+    procedure_invocations:
+      - invocation_id: invocation-comparison
+        run_ref: run-comparison
+        procedure_ref: {id: rda.procedure.fixture.compare-directional, version: "0.1.0"}
+        parameters: {}
+        input_bindings:
+          - {role: query, ref: source-query}
+          - {role: candidate, ref: source-candidate}
+        output_observation_refs: [observation-comparison]
+    signal_states: []
+    observations:
+      - observation_id: observation-comparison
+        definition_ref: {id: rda.observation.fixture.directional-similarity, version: "0.1.0"}
+        status: known
+        procedure_invocation_ref: invocation-comparison
+        value: 0.75
+    assets: []
+    coordinate_spaces: []
+
+cases:
+  - id: valid-exact-rational-source-assertion
+    from: source-rational
+    expect: valid
+
+  - id: invalid-rational-collapsed-to-float
+    from: source-rational
+    expect: invalid
+    findings: [RDA-POP-VALUE-CONTRACT-INVALID]
+    mutation:
+      set:
+        - path: observations[0].value
+          value: 0.008
+
+  - id: invalid-package-wide-duplicate-id
+    from: source-rational
+    expect: invalid
+    findings: [RDA-POP-ID-DUPLICATE]
+    mutation:
+      set:
+        - path: assets[0].asset_id
+          value: source-1
+
+  - id: invalid-unsafe-package-path
+    from: source-rational
+    expect: invalid
+    findings: [RDA-POP-PACKAGE-PATH-UNSAFE]
+    mutation:
+      set:
+        - path: assets[0].locator.value
+          value: ../escape.webp
+
+  - id: invalid-observation-definition-missing
+    from: source-rational
+    expect: invalid
+    findings: [RDA-POP-DEFINITION-MISSING]
+    mutation:
+      set:
+        - path: observations[0].definition_ref
+          value: {id: rda.observation.fixture.missing, version: "0.1.0"}
+
+  - id: invalid-semantic-closure-incomplete
+    from: source-rational
+    expect: invalid
+    findings: [RDA-POP-SEMANTIC-CLOSURE-INVALID]
+    mutation:
+      delete:
+        - semantic_closure.definitions[1]
+
+  - id: valid-measurement-with-signal-state
+    from: measurement
+    expect: valid
+
+  - id: invalid-required-signal-state-missing
+    from: measurement
+    expect: invalid
+    findings: [RDA-POP-SIGNAL-STATE-MISSING]
+    mutation:
+      delete:
+        - observations[0].signal_state_ref
+
+  - id: invalid-signal-domain-for-observation
+    from: measurement
+    expect: invalid
+    findings: [RDA-POP-SIGNAL-DOMAIN-INVALID]
+    mutation:
+      set:
+        - path: signal_states[0].domain_ref
+          value: {id: rda.signal-domain.fixture.linear-b, version: "0.1.0"}
+
+  - id: invalid-procedure-for-observation
+    from: measurement
+    expect: invalid
+    findings: [RDA-POP-PROCEDURE-INVALID]
+    mutation:
+      set:
+        - path: procedure_invocations[0].procedure_ref
+          value: {id: rda.procedure.fixture.alternate-measure, version: "0.1.0"}
+
+  - id: invalid-run-implementation-reference
+    from: measurement
+    expect: invalid
+    findings: [RDA-POP-REFERENCE-MISSING]
+    mutation:
+      set:
+        - path: runs[0].implementation_ref
+          value: impl-missing
+
+  - id: invalid-declared-output-missing
+    from: measurement
+    expect: invalid
+    findings: [RDA-POP-INVOCATION-OUTPUT-INCOHERENT]
+    mutation:
+      set:
+        - path: procedure_invocations[0].output_observation_refs[0]
+          value: observation-missing
+
+  - id: valid-derived-asset
+    from: derived-asset
+    expect: valid
+
+  - id: invalid-derived-asset-reference-missing
+    from: derived-asset
+    expect: invalid
+    findings: [RDA-POP-ASSET-MISSING]
+    mutation:
+      set:
+        - path: observations[0].value.asset_id
+          value: asset-missing
+
+  - id: valid-role-qualified-comparison
+    from: comparison
+    expect: valid
+
+  - id: invalid-comparison-input-role
+    from: comparison
+    expect: invalid
+    findings: [RDA-POP-INPUT-BINDING-INVALID]
+    mutation:
+      set:
+        - path: procedure_invocations[0].input_bindings[1].role
+          value: reference
+
+  - id: invalid-comparison-input-reference
+    from: comparison
+    expect: invalid
+    findings: [RDA-POP-REFERENCE-MISSING]
+    mutation:
+      set:
+        - path: procedure_invocations[0].input_bindings[1].ref
+          value: source-missing
