@@ -142,3 +142,22 @@ The develop history for the same image includes, in order:
 This is strong evidence that Experiment 001 can recover not only a final human development state but also the sequence of Lightroom history events that produced it.
 
 The serialized history-step payloads still need to be extracted in full before individual decision deltas are interpreted.
+
+
+## Lightroom history payload encoding finding
+
+Experiment 001 found that `Adobe_libraryImageDevelopHistoryStep.text` is stored as a BLOB for the tested Lightroom Classic 15.5.1 catalog.
+
+Observed payload form:
+
+- first 4 bytes: big-endian integer matching the apparent uncompressed payload length;
+- remaining bytes begin with `78 9C`, consistent with a zlib stream;
+- `valueString` and `relValueString` are NULL for the tested history rows.
+
+Examples:
+
+- history row 19012 (`Preset: _Fundamental`) begins `00 00 0E B5 78 9C ...`;
+- history row 22040 begins `00 00 0F FE 78 9C ...`;
+- rows 25154 and 29810 expose the same prefix and compressed payload bytes in the inspected output, suggesting the export history event may preserve the same develop state as the immediately preceding synchronized-settings event.
+
+This encoding is an implementation detail of the tested catalog, not an RDA semantic contract. The experiment should decode it through a catalog adapter and preserve the raw payload/digest for auditability.
