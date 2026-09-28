@@ -117,9 +117,20 @@ pairs:
       dimensions: [6237, 4158]
       rendered_exif_camera: Canon EOS 5D Mark IV
       rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
-    pairing_status: catalog_basename_record_confirmed
+    pairing_status: lrcat_export_trace_confirmed
     catalog_match:
       ag_library_file_id_local: 5476
+      adobe_image_id_local: 819
+      develop_settings_id_local: 5509
+      process_version: "15.4"
+      developed_dimensions: [6237, 4158]
+      exported_jpeg_dimensions_match_developed_dimensions: true
+      baseline_history_id_local: 19012
+      export_history_id_local: 29810
+      baseline_relative_decision:
+        Exposure2012_delta: 1.0
+        Temperature_delta_kelvin: -1700
+        Tint_delta: -1
     notes:
       - JPEG dimensions indicate a crop or another spatial transform.
 
