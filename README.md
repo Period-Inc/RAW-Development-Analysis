@@ -67,6 +67,31 @@ Normative project documentation follows the Period Project Documentation Model (
 
 Initial domain work is being developed under `docs/`.
 
+## Current application direction — proxy-first editing
+
+The first practical application is now **proxy edit and later RAW transfer**.
+
+```text
+lightweight JPEG proxy
+  -> offline / web edit decisions
+  -> portable edit manifest
+  -> later JPEG ↔ RAW resolution
+  -> transferability validation
+  -> Adobe target encoding
+```
+
+The RAW does not need to be present while editing the proxy.
+
+This path has standalone value even without AI or automatic RAW analysis: rating, crop, rotation, global development deltas, masks, spotting/removal intent, and other portable edit decisions can be authored against a lightweight JPEG and transferred later.
+
+Sensor-side RAW analysis remains an optional downstream/high-cost observation path rather than the MVP prerequisite.
+
+See:
+
+- `docs/spec/proxy-edit-transfer-spec.md`
+- `docs/proxy-edit-transfer-implementation-plan.md`
+- `schemas/proxy-edit-manifest.schema.json`
+
 ## Current conformance surface
 
 The repository now contains executable contracts for:
