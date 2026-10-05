@@ -1,0 +1,248 @@
+experiment: raw-jpeg-development-trace
+experiment_version: "0.1.0"
+local_workspace_root_hint: /Users/agent/Documents/Temporary/RAW-Development-Analysis
+source_root_hint: sources
+
+catalogs:
+  - catalog_id: grill-steak-familia
+    file: _20260918_GRILL STEAK FAMILIA.lrcat
+    sha256: 96084929732a30a9f548fe9543bc49d2b82cdfafeec0c24ad583193c8e0a4599
+    association_status: no_fixture_match_found
+    fixture_pairs: []
+    notes:
+      - None of the four food RAW basenames were found in AgLibraryFile during the cross-catalog lookup.
+      - This catalog contains a distinct IMGL0332.CR2 row (AgLibraryFile.id_local 6521), demonstrating that basename alone is not a globally unique Source Artifact identity.
+
+  - catalog_id: acoustic-anga-sign-language
+    file: "_20260923_Acoustic ANGA feat.手話.lrcat"
+    sha256: 318757a41ceebe5119f9aba29e30e06a1d9c570231a50026cf6ee223ae135694
+    association_status: basename_records_confirmed
+    fixture_pairs:
+      - acoustic-IMGL0332
+      - acoustic-IMGL0400
+      - acoustic-IMGL0479
+      - acoustic-IMGL0576
+      - acoustic-IMGM7105
+
+  - catalog_id: bni-omoiyari-handover
+    file: "_20260925_BNI-OMOIYARI_引継式.lrcat"
+    sha256: 106507e3328b0bd8b19b4eeb62d388926e547a09694df57c33d2299992a65666
+    association_status: basename_records_confirmed
+    fixture_pairs:
+      - bni-IMGL0771
+      - bni-IMGL0776
+      - bni-IMGL0786
+      - bni-IMGM7197
+
+pairs:
+  - pair_id: food-IMGL9516
+    raw:
+      file: IMGL9516.CR2
+      sha256: a457649b8d27a3874fa646aab44b9c7e88e3bdb95d670b1eda0ec2dafddd8dc5
+      format: Canon CR2
+    jpeg:
+      file: "ステーキ_国産黒毛和牛サーロインステーキ_260911_165030_IMGL9516.jpg"
+      sha256: 7f88ef7c5446dc0b6f960d05296168c34cd7ae4e3535a1d01c15933b024cd1b2
+      dimensions: [6720, 4480]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: raw_jpeg_basename_match_catalog_record_not_found
+
+  - pair_id: food-IMGL9449
+    raw:
+      file: IMGL9449.CR2
+      sha256: a83eed806778680e5ea1e10ae462f4d24b7db740dae8a6467ff63180b229a82e
+      format: Canon CR2
+    jpeg:
+      file: "サラダ_懐かしのクラシックサラダ_260911_153526_IMGL9449.jpg"
+      sha256: 333e13caf995aaeff7d01c6c1985b9003b393eb6ef77e96466e04026f13ff62b
+      dimensions: [6720, 4480]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: raw_jpeg_basename_match_catalog_record_not_found
+
+  - pair_id: food-IMGL9552
+    raw:
+      file: IMGL9552.CR2
+      sha256: b56d09c1297b77eba97233821e94706336d1bf3f4c96f4808e7f18590cee3e8d
+      format: Canon CR2
+    jpeg:
+      file: "Ingredient_国産黒毛和牛ヒレ肉_260911_171353_IMGL9552.jpg"
+      sha256: 41a942a8b50c1e7226ce38de45057e4fa106395f99166b5c51989824999e8370
+      dimensions: [6571, 4381]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: raw_jpeg_basename_match_catalog_record_not_found
+    notes:
+      - JPEG dimensions indicate a crop or another spatial transform relative to a full 6720x4480 render.
+
+  - pair_id: food-IMGL9596
+    raw:
+      file: IMGL9596.CR2
+      sha256: 5aaab42a5542835236d692feca493e0cfb7b169c253730dd529471c15900a535
+      format: Canon CR2
+    jpeg:
+      file: "手作りハンバーグ＆ダイスステーキ_260911_181804_IMGL9596.jpg"
+      sha256: 5b4cccdf7d665e3608373585cb027a35591465652d346896b0eec4455e49bb21
+      dimensions: [6720, 4480]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: raw_jpeg_basename_match_catalog_record_not_found
+
+  - pair_id: acoustic-IMGL0332
+    raw:
+      file: IMGL0332.CR2
+      sha256: 7da3628170e12c71351090b5773bc308c8a617815d73d35cc079061ee3151806
+      format: Canon CR2
+    jpeg:
+      file: 260923_184609_IMGL0332.jpg
+      sha256: c63c3a1c223414b76d4e8e3d2ab262104d28c85548a4d5b0995cacaf11cacd3b
+      dimensions: [4480, 6720]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 2239
+    notes:
+      - Portrait-oriented rendered result.
+
+  - pair_id: acoustic-IMGL0400
+    raw:
+      file: IMGL0400.CR2
+      sha256: 45e317daeb6b238055aca7a5e5f27caa849315c870f3a86bb85a053666af4afe
+      format: Canon CR2
+    jpeg:
+      file: 260923_191504_IMGL0400.jpg
+      sha256: be83738fcdaec78cd65ee5b66d024a1479db4a694406bc4f2ee8c15de7982341
+      dimensions: [6237, 4158]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: lrcat_export_trace_confirmed
+    catalog_match:
+      ag_library_file_id_local: 5476
+      adobe_image_id_local: 819
+      develop_settings_id_local: 5509
+      process_version: "15.4"
+      developed_dimensions: [6237, 4158]
+      exported_jpeg_dimensions_match_developed_dimensions: true
+      baseline_history_id_local: 19012
+      export_history_id_local: 29810
+      baseline_relative_decision:
+        Exposure2012_delta: 1.0
+        Temperature_delta_kelvin: -1700
+        Tint_delta: -1
+    notes:
+      - JPEG dimensions indicate a crop or another spatial transform.
+
+  - pair_id: acoustic-IMGL0479
+    raw:
+      file: IMGL0479.CR2
+      sha256: d2ea4bf8b2e37b864e0627a86eeb350ecc408aad088832a152633ad1ce29739f
+      format: Canon CR2
+    jpeg:
+      file: 260923_195115_IMGL0479.jpg
+      sha256: 7395956de085ac07b07a8401ad66779e8c8e9acf24c5cb6529792a9a75d3490e
+      dimensions: [4480, 6720]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 12029
+    notes:
+      - Portrait-oriented rendered result.
+
+  - pair_id: acoustic-IMGL0576
+    raw:
+      file: IMGL0576.CR2
+      sha256: 8c00619fc58e39569d205427ae5216f8e0bb3f65fa8fa741264aa3ce49959fe0
+      format: Canon CR2
+    jpeg:
+      file: 260923_202145_IMGL0576.jpg
+      sha256: 0f6fd467707bab184177c5cc631425451ceb74c175c5cbd639bddbe467b49020
+      dimensions: [6720, 4480]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 16077
+
+  - pair_id: acoustic-IMGM7105
+    raw:
+      file: IMGM7105.CR2
+      sha256: 23a68f1ea251e1fe8d784a68a6080e478c55f0c10bb29e1b4c4bde56b46f2a97
+      format: Canon CR2
+    jpeg:
+      file: 260923_212001_IMGM7105.jpg
+      sha256: b12a847b6652fa2c37d07f3bc456fc9eb0824bdb4bfed7c87e68a6649b23258c
+      dimensions: [6480, 4320]
+      rendered_exif_camera: Canon EOS 5DS
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 10671
+
+  - pair_id: bni-IMGL0771
+    raw:
+      file: IMGL0771.CR2
+      sha256: 39cc8c2e50a04bd2e5de79888912b46e38ec40f17b7e93f1f0571317475bf767
+      format: Canon CR2
+    jpeg:
+      file: 260925_151416_IMGL0771.jpg
+      sha256: b03dfe341be9e07003dc11c38821c24085c747c321e4dd40f0c2203cbe242058
+      dimensions: [6720, 4480]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 685
+
+  - pair_id: bni-IMGL0776
+    raw:
+      file: IMGL0776.CR2
+      sha256: b58181aecfd0e38edd94c59ef3a94946be14ab4c2f91f3c222bdfb859cb89a1a
+      format: Canon CR2
+    jpeg:
+      file: 260925_151822_IMGL0776.jpg
+      sha256: 729dcf49a2cbb1e4463fbfc0a382bc19f7e7ec875cff72cc7d415988e2d0dfb4
+      dimensions: [6720, 4480]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 801
+
+  - pair_id: bni-IMGL0786
+    raw:
+      file: IMGL0786.CR2
+      sha256: db549889a24328af07ff94921f2e86a6e05b9e79d7e56a2504c586cbf4e2611d
+      format: Canon CR2
+    jpeg:
+      file: 260925_152305_IMGL0786.jpg
+      sha256: 97d86d3730fc3f6517fd9b059db8db55c8027e3746106b7198acbeb60f83850e
+      dimensions: [6720, 4480]
+      rendered_exif_camera: Canon EOS 5D Mark IV
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 1021
+
+  - pair_id: bni-IMGM7197
+    raw:
+      file: IMGM7197.CR2
+      sha256: 11aaf9458386936e9f8570c536c64aee7ed319ba33fd445df616427c99734cdd
+      format: Canon CR2
+    jpeg:
+      file: 260925_170445_IMGM7197.jpg
+      sha256: 8115e4c220a1019797ff880cfe67f9a0534240b0589119a734c61ce1c961f6c5
+      dimensions: [6034, 4023]
+      rendered_exif_camera: Canon EOS 5DS
+      rendered_software: Adobe Photoshop Lightroom Classic 15.5.1 (Macintosh)
+    pairing_status: catalog_basename_record_confirmed
+    catalog_match:
+      ag_library_file_id_local: 5113
+    notes:
+      - JPEG dimensions indicate a crop or another spatial transform.
+
+untracked_local_files:
+  - file: .DS_Store
+    disposition: ignore
