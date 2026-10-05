@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://period-inc.github.io/rda/schemas/proxy-edit-manifest-0.1.schema.json",
+  "title": "RDA Proxy Edit Manifest 0.1",
+  "type": "object",
+  "required": [
+    "manifest_version",
+    "proxy",
+    "decisions"
+  ],
+  "properties": {
+    "manifest_version": {
+      "const": "0.1"
+    },
+    "proxy": {
+      "type": "object",
+      "required": [
+        "artifact_digest",
+        "width",
+        "height",
+        "orientation",
+        "lineage_status"
+      ],
+      "properties": {
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "orientation": {
+          "type": [
+            "integer",
+            "string"
+          ]
+        },
+        "lineage_status": {
+          "enum": [
+            "known",
+            "unknown"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "baseline": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "decisions": {
+      "type": "object",
+      "properties": {
+        "rating": {
+          "$ref": "#/$defs/decisionScalar"
+        },
+        "reject": {
+          "$ref": "#/$defs/decisionScalar"
+        },
+        "pick": {
+          "$ref": "#/$defs/decisionScalar"
+        },
+        "geometry": {
+          "type": "object"
+        },
+        "development": {
+          "type": "object"
+        },
+        "masks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mask"
+          }
+        },
+        "spot_edits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/spotEdit"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "annotations": {
+      "type": "object"
+    },
+    "provenance": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "decisionScalar": {
+      "type": "object",
+      "required": [
+        "value",
+        "source"
+      ],
+      "properties": {
+        "value": {},
+        "source": {
+          "enum": [
+            "human",
+            "rule",
+            "model",
+            "import"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "point": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "mask": {
+      "type": "object",
+      "required": [
+        "id",
+        "coordinate_space",
+        "components"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "coordinate_space": {
+          "const": "oriented-normalized"
+        },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object"
+          }
+        },
+        "raster_asset_ref": {
+          "type": "string"
+        },
+        "semantic_intent": {
+          "type": "string"
+        },
+        "adjustments": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": true
+    },
+    "spotEdit": {
+      "type": "object",
+      "required": [
+        "id",
+        "mode",
+        "target"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "enum": [
+            "candidate",
+            "heal",
+            "clone",
+            "remove",
+            "generative_remove"
+          ]
+        },
+        "target": {
+          "type": "object"
+        },
+        "source": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "feather": {
+          "type": "number",
+          "minimum": 0
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "source_of_decision": {
+          "enum": [
+            "human",
+            "rule",
+            "model",
+            "import"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
