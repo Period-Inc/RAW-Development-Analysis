@@ -4,7 +4,7 @@ id: "rda-base-observation-profile-plan"
 name: "Base RAW Observation Profile Plan"
 slug: "base-observation-profile"
 type: "planning.plan"
-status: "active"
+status: "deferred"
 created_at: "2026-09-26"
 updated_at: "2026-09-26"
 owners:
@@ -19,6 +19,15 @@ relations:
 ---
 
 # Base RAW Observation Profile Plan
+
+## Current priority note
+
+As of 2026-10-05 this plan is deferred behind the proxy-first editing workflow.
+
+The project no longer requires sensor-side RAW analysis before delivering user value. The primary application path is lightweight JPEG proxy editing followed by late RAW resolution and parameter transfer.
+
+This plan remains valid as a later high-cost observation layer when proxy evidence is insufficient or when automated development proposals require sensor-side evidence.
+
 
 ## Objective
 
